@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultipleRanker.Infrastructu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultipleRanker.Host.Console", "MultipleRanker.Host.Console\MultipleRanker.Host.Console.csproj", "{9204F773-C770-4FE5-AE90-B3F3BD703C12}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F9FC45C5-750F-4FDE-BDB0-44E6913CFA68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultipleRanker.Tests.Unit", "MultipleRanker.Tests.Unit\MultipleRanker.Tests.Unit.csproj", "{768E9696-2605-4A1D-9C1D-0E3C06E1A480}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,9 +55,16 @@ Global
 		{9204F773-C770-4FE5-AE90-B3F3BD703C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9204F773-C770-4FE5-AE90-B3F3BD703C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9204F773-C770-4FE5-AE90-B3F3BD703C12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{768E9696-2605-4A1D-9C1D-0E3C06E1A480}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{768E9696-2605-4A1D-9C1D-0E3C06E1A480}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{768E9696-2605-4A1D-9C1D-0E3C06E1A480}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{768E9696-2605-4A1D-9C1D-0E3C06E1A480}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{768E9696-2605-4A1D-9C1D-0E3C06E1A480} = {F9FC45C5-750F-4FDE-BDB0-44E6913CFA68}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9D2C648A-C7B6-4354-AA36-3BC1B4AD312C}
