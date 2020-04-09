@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MultipleRanker.Host.Console.IoC;
 
 namespace MultipleRanker.Host.Console
 {
@@ -10,6 +11,9 @@ namespace MultipleRanker.Host.Console
 
             builder
                 .RegisterModule(new MediatorModule());
+
+            builder
+                .RegisterModule(new InfrastructureModule());
 
             return builder.Build();
         }

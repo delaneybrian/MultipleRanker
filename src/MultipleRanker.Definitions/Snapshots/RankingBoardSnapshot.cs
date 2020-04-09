@@ -7,6 +7,7 @@ namespace MultipleRanker.Definitions.Snapshots
     {
         public Guid Id { get; set; }
 
-        public ICollection<ParticipantSnapshot> Participants { get; set; } = new List<ParticipantSnapshot>();
+        public ICollection<RankingBoardParticipantSnapshot> RankingBoardParticipants { get; set; } 
+            = new List<RankingBoardParticipantSnapshot>();
     }
 }

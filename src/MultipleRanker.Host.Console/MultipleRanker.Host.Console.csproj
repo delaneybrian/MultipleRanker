@@ -13,6 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\MultipleRanker.Application\MultipleRanker.Application.csproj" />
     <ProjectReference Include="..\MultipleRanker.Definitions\MultipleRanker.Definitions.csproj" />
+    <ProjectReference Include="..\MultipleRanker.Infrastructure\MultipleRanker.Infrastructure.csproj" />
+    <ProjectReference Include="..\MultipleRanker.Interfaces\MultipleRanker.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

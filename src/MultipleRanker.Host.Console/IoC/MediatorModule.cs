@@ -20,8 +20,7 @@ namespace MultipleRanker.Host.Console
                 return t => c.Resolve(t);
             });
 
-            builder.RegisterAssemblyTypes(Assembly.Load("MultipleRanker.Application")).AsImplementedInterfaces(); // via assembly scan
-
+            builder.RegisterAssemblyTypes(Assembly.Load("MultipleRanker.Application")).AsImplementedInterfaces();
         }
     }
 }

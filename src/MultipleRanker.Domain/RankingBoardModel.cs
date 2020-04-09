@@ -9,7 +9,7 @@ namespace MultipleRanker.Domain
     public class RankingBoardModel : AggregateBase
     {
         private Guid _id;
-        private List<ParticipantSnapshot> _participantSnapshots;
+        private List<ParticipantRankingModel> _participantRankingModels;
 
         public RankingBoardModel()
         {
@@ -19,7 +19,9 @@ namespace MultipleRanker.Domain
         private RankingBoardModel(RankingBoardSnapshot snapshot)
         {
             _id = snapshot.Id;
-            _participantSnapshots = snapshot.Participants.ToList();
+            _participantRankingModels = snapshot.RankingBoardParticipants
+                .Select(participantSnapshot => ParticipantRankingModel.For(participantSnapshot))
+                .ToList();
         }
 
         public static RankingBoardModel For(RankingBoardSnapshot snapshot)
@@ -34,7 +36,9 @@ namespace MultipleRanker.Domain
 
         public void Apply(AddParticipantToRankingBoardCommand cmd)
         {
-            _participantSnapshots.Add(new ParticipantSnapshot
+            
+
+            _participantSnapshots.Add(new RankingBoardParticipantSnapshot
             {
                 Id = cmd.ParticipantId,
                 Name = cmd.ParticipantName
@@ -46,7 +50,9 @@ namespace MultipleRanker.Domain
             return new RankingBoardSnapshot
             {
                 Id = _id,
-                Participants = _participantSnapshots
+                RankingBoardParticipants = _participantRankingModels
+                    .Select(rankingModel => rankingModel.ToSnapshot())
+                    .ToList()
             };
         }
     }
