@@ -8,8 +8,8 @@ namespace MultipleRanker.Domain
 {
     public class RankingBoardModel : AggregateBase
     {
-        private Guid _id;
-        private List<ParticipantRankingModel> _participantRankingModels = new List<ParticipantRankingModel>();
+        public Guid Id { get; private set; }
+        public List<ParticipantRankingModel> ParticipantRankingModels { get; private set; } = new List<ParticipantRankingModel>();
         private long _matchUpsCompleted;
 
         public RankingBoardModel()
@@ -19,8 +19,8 @@ namespace MultipleRanker.Domain
 
         private RankingBoardModel(RankingBoardSnapshot snapshot)
         {
-            _id = snapshot.Id;
-            _participantRankingModels = snapshot.RankingBoardParticipants
+            Id = snapshot.Id;
+            ParticipantRankingModels = snapshot.RankingBoardParticipants
                 .Select(participantSnapshot => ParticipantRankingModel.For(participantSnapshot))
                 .ToList();
             _matchUpsCompleted = snapshot.MatchUpsCompleted;
@@ -33,7 +33,7 @@ namespace MultipleRanker.Domain
 
         public void Apply(CreateRankingBoardCommand cmd)
         {
-            _id = cmd.Id;
+            Id = cmd.Id;
         }
 
         public void Apply(MatchUpCompletedCommand cmd)
@@ -42,7 +42,7 @@ namespace MultipleRanker.Domain
 
             foreach (var matchUpParticipantScore in cmd.ParticipantScores)
             {
-                var participantRankingModel = _participantRankingModels.Single(x => x.Id == matchUpParticipantScore.ParticipantId);
+                var participantRankingModel = ParticipantRankingModels.Single(x => x.Id == matchUpParticipantScore.ParticipantId);
 
                 foreach (var opponentMatchUpParticipantScore in cmd.ParticipantScores
                     .Where(x => x.ParticipantId != matchUpParticipantScore.ParticipantId))
@@ -59,15 +59,15 @@ namespace MultipleRanker.Domain
         {
             var participantRankingModel = new ParticipantRankingModel(cmd.ParticipantId, cmd.ParticipantName);
 
-            _participantRankingModels.Add(participantRankingModel);
+            ParticipantRankingModels.Add(participantRankingModel);
         }
 
         public RankingBoardSnapshot ToSnapshot()
         {
             return new RankingBoardSnapshot
             {
-                Id = _id,
-                RankingBoardParticipants = _participantRankingModels
+                Id = Id,
+                RankingBoardParticipants = ParticipantRankingModels
                     .Select(rankingModel => rankingModel.ToSnapshot())
                     .ToList(),
                 MatchUpsCompleted = _matchUpsCompleted

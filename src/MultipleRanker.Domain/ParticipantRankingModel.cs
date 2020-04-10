@@ -8,22 +8,22 @@ namespace MultipleRanker.Domain
     {
         public Guid Id { get; private set; }
 
-        private string _name;
+        public string Name { get; private set; };
 
-        private long _totalScoreFor;
-        private long _totalScoreAgainst;
+        public long TotalScoreFor { get; private set; };
+        public long TotalScoreAgainst { get; private set; };
 
-        private int _totalGamesPlayed;
+        public int TotalGamesPlayed { get; private set; };
 
-        private IDictionary<Guid, int> _totalScoreByOpponentId = new Dictionary<Guid, int>();
-        private IDictionary<Guid, int> _totalWinsByOpponentId = new Dictionary<Guid, int>();
-        private IDictionary<Guid, int> _totalScoreConcededByOpponentId = new Dictionary<Guid, int>();
-        private IDictionary<Guid, int> _totalLosesByOpponentId = new Dictionary<Guid, int>();
+        public IDictionary<Guid, int> TotalScoreByOpponentId { get; private set; } = new Dictionary<Guid, int>();
+        public IDictionary<Guid, int> TotalWinsByOpponentId { get; private set; } = new Dictionary<Guid, int>();
+        public IDictionary<Guid, int> TotalScoreConcededByOpponentId { get; private set; } = new Dictionary<Guid, int>();
+        public IDictionary<Guid, int> TotalLosesByOpponentId { get; private set; } = new Dictionary<Guid, int>();
 
         public ParticipantRankingModel(Guid id, string name)
         {
             Id = id;
-            _name = name;
+           Name = name;
         }
 
         public static ParticipantRankingModel For(RankingBoardParticipantSnapshot snapshot)
@@ -33,23 +33,23 @@ namespace MultipleRanker.Domain
 
         public void AddResultVersus(Guid opponentId, int score, int opponentScore)
         {
-            _totalGamesPlayed += 1;
+            TotalGamesPlayed += 1;
 
-            _totalScoreFor += score;
-            _totalScoreAgainst += score;
+            TotalScoreFor += score;
+            TotalScoreAgainst += opponentScore;
 
             if (score > opponentScore)
-                AddOrUpdateDictionary(_totalWinsByOpponentId, opponentId, (x) => x += 1, 1);
+                AddOrUpdateDictionary(TotalWinsByOpponentId, opponentId, (x) => x += 1, 1);
 
             if (score < opponentScore)
-                AddOrUpdateDictionary(_totalLosesByOpponentId, opponentId, (x) => x += 1, 1);
+                AddOrUpdateDictionary(TotalLosesByOpponentId, opponentId, (x) => x += 1, 1);
 
             if(score == opponentScore)
                 throw new NotImplementedException("Draws not yet supported");
 
-            AddOrUpdateDictionary(_totalScoreByOpponentId, opponentId, (x) => x += score, score);
+            AddOrUpdateDictionary(TotalScoreByOpponentId, opponentId, (x) => x += score, score);
 
-            AddOrUpdateDictionary(_totalScoreConcededByOpponentId, opponentId, (x) => x += opponentScore, opponentScore);
+            AddOrUpdateDictionary(TotalScoreConcededByOpponentId, opponentId, (x) => x += opponentScore, opponentScore);
 
         }
 
@@ -58,28 +58,28 @@ namespace MultipleRanker.Domain
             return new RankingBoardParticipantSnapshot
             {
                 Id = Id,
-                Name = _name,
-                TotalGamesPlayed = _totalGamesPlayed,
-                TotalScoreFor = _totalScoreFor,
-                TotalScoreAgainst = _totalScoreAgainst,
-                TotalWinsByOpponentId = _totalWinsByOpponentId,
-                TotalLosesByOpponentId = _totalLosesByOpponentId,
-                TotalScoreByOpponentId = _totalScoreByOpponentId,
-                TotalScoreConcededByOpponentId = _totalScoreConcededByOpponentId
+                Name = Name,
+                TotalGamesPlayed = TotalGamesPlayed,
+                TotalScoreFor = TotalScoreFor,
+                TotalScoreAgainst = TotalScoreAgainst,
+                TotalWinsByOpponentId = TotalWinsByOpponentId,
+                TotalLosesByOpponentId = TotalLosesByOpponentId,
+                TotalScoreByOpponentId = TotalScoreByOpponentId,
+                TotalScoreConcededByOpponentId = TotalScoreConcededByOpponentId
             };
         }
 
         private ParticipantRankingModel(RankingBoardParticipantSnapshot snapshot)
         {
             Id = snapshot.Id;
-            _name = snapshot.Name;
-            _totalScoreFor = snapshot.TotalScoreFor;
-            _totalScoreAgainst = snapshot.TotalScoreAgainst;
+            Name = snapshot.Name;
+            TotalScoreFor = snapshot.TotalScoreFor;
+            TotalScoreAgainst = snapshot.TotalScoreAgainst;
 
-            _totalScoreByOpponentId = snapshot.TotalScoreByOpponentId;
-            _totalScoreConcededByOpponentId = snapshot.TotalScoreConcededByOpponentId;
-            _totalLosesByOpponentId = snapshot.TotalLosesByOpponentId;
-            _totalWinsByOpponentId = snapshot.TotalWinsByOpponentId;
+            TotalScoreByOpponentId = snapshot.TotalScoreByOpponentId;
+            TotalScoreConcededByOpponentId = snapshot.TotalScoreConcededByOpponentId;
+            TotalLosesByOpponentId = snapshot.TotalLosesByOpponentId;
+            TotalWinsByOpponentId = snapshot.TotalWinsByOpponentId;
         }
 
         private void AddOrUpdateDictionary(
