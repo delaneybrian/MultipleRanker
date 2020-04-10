@@ -9,5 +9,7 @@ namespace MultipleRanker.Definitions.Snapshots
 
         public ICollection<RankingBoardParticipantSnapshot> RankingBoardParticipants { get; set; } 
             = new List<RankingBoardParticipantSnapshot>();
+
+        public long MatchUpsCompleted { get; set; }
     }
 }

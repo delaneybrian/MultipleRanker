@@ -15,7 +15,7 @@ namespace MultipleRanker.Tests.Unit
         [Test]
         public void SampleTest() =>
             _context
-                .SetOpponentId(Guid.NewGuid())
+                .SetOpponentParticipantId(Guid.NewGuid())
                 .ApplyMatch(1, 2)
                 .ApplyMatch(1, 2)
                 .AssertSomething();
@@ -28,10 +28,10 @@ namespace MultipleRanker.Tests.Unit
 
             public TestContext()
             {
-                _sut = new ParticipantRankingModel();
+                _sut = new ParticipantRankingModel(Guid.NewGuid(), "Test Participant");
             }
 
-            public TestContext SetOpponentId(Guid opponentId)
+            public TestContext SetOpponentParticipantId(Guid opponentId)
             {
                 _opponentId = opponentId;
 

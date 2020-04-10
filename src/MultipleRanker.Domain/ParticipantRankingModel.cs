@@ -6,7 +6,8 @@ namespace MultipleRanker.Domain
 {
     public class ParticipantRankingModel
     {
-        private Guid _id;
+        public Guid Id { get; private set; }
+
         private string _name;
 
         private long _totalScoreFor;
@@ -19,9 +20,10 @@ namespace MultipleRanker.Domain
         private IDictionary<Guid, int> _totalScoreConcededByOpponentId = new Dictionary<Guid, int>();
         private IDictionary<Guid, int> _totalLosesByOpponentId = new Dictionary<Guid, int>();
 
-        public ParticipantRankingModel()
+        public ParticipantRankingModel(Guid id, string name)
         {
-            
+            Id = id;
+            _name = name;
         }
 
         public static ParticipantRankingModel For(RankingBoardParticipantSnapshot snapshot)
@@ -55,7 +57,7 @@ namespace MultipleRanker.Domain
         {
             return new RankingBoardParticipantSnapshot
             {
-                Id = _id,
+                Id = Id,
                 Name = _name,
                 TotalGamesPlayed = _totalGamesPlayed,
                 TotalScoreFor = _totalScoreFor,
@@ -69,7 +71,7 @@ namespace MultipleRanker.Domain
 
         private ParticipantRankingModel(RankingBoardParticipantSnapshot snapshot)
         {
-            _id = snapshot.Id;
+            Id = snapshot.Id;
             _name = snapshot.Name;
             _totalScoreFor = snapshot.TotalScoreFor;
             _totalScoreAgainst = snapshot.TotalScoreAgainst;

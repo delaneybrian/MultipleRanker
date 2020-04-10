@@ -15,5 +15,8 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
         [DataMember]
         public ICollection<RankingBoardParticipantSnapshotEntity> RankingBoardParticipants { get; set; }
             = new List<RankingBoardParticipantSnapshotEntity>();
+
+        [DataMember]
+        public long MatchUpsCompleted { get; set; }
     }
 }

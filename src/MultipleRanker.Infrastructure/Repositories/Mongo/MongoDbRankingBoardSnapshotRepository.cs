@@ -15,7 +15,7 @@ namespace MultipleRanker.Infrastructure.Repositories
         public MongoDbRankingBoardSnapshotRepository()
         {
             var client = new MongoClient(
-                "mongodb://briandelaney:.$RC2SpD2Zsh!eM@ds016148.mlab.com:16148/multipleranker"
+                "mongodb://briandelaney:.$RC2SpD2Zsh!eM@ds016148.mlab.com:16148/multipleranker?retryWrites=false"
             );
             
             var database = client.GetDatabase("multipleranker");
@@ -25,12 +25,20 @@ namespace MultipleRanker.Infrastructure.Repositories
 
         public async Task<RankingBoardSnapshot> Get(Guid rankingBoardId)
         {
-            var rankingBoards = await _rankingCollection
-                .FindAsync(x => x.Id == rankingBoardId);
+            try
+            {
+                var rankingBoards = await _rankingCollection
+                    .FindAsync(x => x.Id == rankingBoardId);
 
-            return rankingBoards
-                .Single()
-                .ToRankingBoardSnapshot();
+                return rankingBoards
+                    .Single()
+                    .ToRankingBoardSnapshot();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         public async Task Set(RankingBoardSnapshot rankingBoardSnapshot)
