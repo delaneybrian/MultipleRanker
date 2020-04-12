@@ -11,5 +11,9 @@ namespace MultipleRanker.Definitions.Snapshots
             = new List<RankingBoardParticipantSnapshot>();
 
         public long MatchUpsCompleted { get; set; }
+
+        public long NumberOfRatingsPerformed { get; set; }
+
+        public DateTime LastRatingCalculatedAt { get; set; }
     }
 }

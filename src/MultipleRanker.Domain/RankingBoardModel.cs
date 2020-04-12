@@ -11,6 +11,8 @@ namespace MultipleRanker.Domain
         public Guid Id { get; private set; }
         public List<ParticipantRankingModel> ParticipantRankingModels { get; private set; } = new List<ParticipantRankingModel>();
         private long _matchUpsCompleted;
+        private long _numberOfRatingsPerformed;
+        private DateTime _lastRatingCalculatedAt;
 
         public RankingBoardModel()
         {
@@ -24,6 +26,8 @@ namespace MultipleRanker.Domain
                 .Select(participantSnapshot => ParticipantRankingModel.For(participantSnapshot))
                 .ToList();
             _matchUpsCompleted = snapshot.MatchUpsCompleted;
+            _lastRatingCalculatedAt = snapshot.LastRatingCalculatedAt;
+            _numberOfRatingsPerformed = snapshot.NumberOfRatingsPerformed;
         }
 
         public static RankingBoardModel For(RankingBoardSnapshot snapshot)
@@ -34,6 +38,13 @@ namespace MultipleRanker.Domain
         public void Apply(CreateRankingBoardCommand cmd)
         {
             Id = cmd.Id;
+        }
+
+        public void Apply(GenerateRatingsForRankingBoardCommand cmd)
+        {
+            //todo remove dependency on DateTime here :-(
+            _lastRatingCalculatedAt = DateTime.UtcNow;
+            _numberOfRatingsPerformed++;
         }
 
         public void Apply(MatchUpCompletedCommand cmd)
@@ -70,7 +81,9 @@ namespace MultipleRanker.Domain
                 RankingBoardParticipants = ParticipantRankingModels
                     .Select(rankingModel => rankingModel.ToSnapshot())
                     .ToList(),
-                MatchUpsCompleted = _matchUpsCompleted
+                MatchUpsCompleted = _matchUpsCompleted,
+                NumberOfRatingsPerformed = _numberOfRatingsPerformed,
+                LastRatingCalculatedAt = _lastRatingCalculatedAt
             };
         }
     }

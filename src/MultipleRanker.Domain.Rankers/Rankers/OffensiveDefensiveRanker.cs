@@ -1,4 +1,5 @@
 ﻿using System;
+using MultipleRanker.Definitions;
 
 namespace MultipleRanker.Domain.Rankers
 {
@@ -9,7 +10,7 @@ namespace MultipleRanker.Domain.Rankers
             return rankerType == RankerType.OffensiveDefensive;
         }
 
-        public void Rank(RankingBoardModel rankingBoardModel)
+        public RatingResults Rank(RankingBoardModel rankingBoardModel)
         {
             throw new NotImplementedException();
         }

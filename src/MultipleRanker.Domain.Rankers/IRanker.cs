@@ -1,9 +1,11 @@
-﻿namespace MultipleRanker.Domain.Rankers
+﻿using MultipleRanker.Definitions;
+
+namespace MultipleRanker.Domain.Rankers
 {
     public interface IRanker
     {
         bool IsFor(RankerType rankerType);
 
-        void Rank(RankingBoardModel rankingBoardModel);
+        RatingResults Rank(RankingBoardModel rankingBoardModel);
     }
 }

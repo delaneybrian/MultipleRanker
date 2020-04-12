@@ -8,12 +8,11 @@ namespace MultipleRanker.Domain
     {
         public Guid Id { get; private set; }
 
-        public string Name { get; private set; };
+        public string Name { get; private set; }
 
-        public long TotalScoreFor { get; private set; };
-        public long TotalScoreAgainst { get; private set; };
-
-        public int TotalGamesPlayed { get; private set; };
+        public long TotalScoreFor { get; private set; }
+        public long TotalScoreAgainst { get; private set; }
+        public int TotalGamesPlayed { get; private set; }
 
         public IDictionary<Guid, int> TotalScoreByOpponentId { get; private set; } = new Dictionary<Guid, int>();
         public IDictionary<Guid, int> TotalWinsByOpponentId { get; private set; } = new Dictionary<Guid, int>();

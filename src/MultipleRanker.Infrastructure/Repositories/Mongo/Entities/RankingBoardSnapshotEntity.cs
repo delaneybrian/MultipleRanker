@@ -18,5 +18,11 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 
         [DataMember]
         public long MatchUpsCompleted { get; set; }
+
+        [DataMember]
+        public long NumberOfRatingsPerformed { get; set; }
+
+        [DataMember]
+        public DateTime LastRatingCalculatedAt { get; set; }
     }
 }

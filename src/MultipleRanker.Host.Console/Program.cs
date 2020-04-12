@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
-using MediatR;
 using MultipleRanker.Definitions;
 using MultipleRanker.Definitions.Commands;
+using MultipleRanker.Interfaces;
 
 namespace MultipleRanker.Host.Console
 {
@@ -13,11 +13,11 @@ namespace MultipleRanker.Host.Console
         {
             using (var container = Bootstrapper.Bootstrap())
             {
-                var mediator = container.Resolve<IMediator>();
+                var commandPublisher = container.Resolve<ICommandPublisher>();
 
                 var rankingBoardId = Guid.NewGuid();
 
-                mediator.Send(new CreateRankingBoardCommand()
+                commandPublisher.Publish(new CreateRankingBoardCommand()
                 {
                     Id = rankingBoardId,
                     Name = "Test Board"
@@ -26,21 +26,21 @@ namespace MultipleRanker.Host.Console
                 var participantId = Guid.NewGuid();
                 var opponentId = Guid.NewGuid();
 
-                mediator.Send(new AddParticipantToRankingBoardCommand
+                commandPublisher.Publish(new AddParticipantToRankingBoardCommand
                 {
                     ParticipantId = participantId,
                     ParticipantName = "Team1",
                     RankingBoardId = rankingBoardId
                 }).Wait();
 
-                mediator.Send(new AddParticipantToRankingBoardCommand
+                commandPublisher.Publish(new AddParticipantToRankingBoardCommand
                 {
                     ParticipantId = opponentId,
                     ParticipantName = "Team2",
                     RankingBoardId = rankingBoardId
                 }).Wait();
 
-                mediator.Send(new MatchUpCompletedCommand
+                commandPublisher.Publish(new MatchUpCompletedCommand
                 {
                     ParticipantScores = new List<MatchUpParticipantScore>
                     {

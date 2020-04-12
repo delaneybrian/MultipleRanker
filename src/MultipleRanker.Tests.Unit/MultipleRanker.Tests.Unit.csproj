@@ -17,4 +17,10 @@
     <ProjectReference Include="..\MultipleRanker.Domain\MultipleRanker.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Files\NCAAResults.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
