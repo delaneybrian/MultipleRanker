@@ -15,6 +15,9 @@ namespace MultipleRanker.Host.Console
             builder
                 .RegisterModule(new InfrastructureModule());
 
+            builder
+                .RegisterModule(new MessagingModule());
+
             return builder.Build();
         }
     }

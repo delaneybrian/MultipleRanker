@@ -15,4 +15,8 @@
     <ProjectReference Include="..\MultipleRanker.Interfaces\MultipleRanker.Interfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="MessageHandlers\" />
+  </ItemGroup>
+
 </Project>
