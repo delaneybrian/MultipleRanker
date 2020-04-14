@@ -22,7 +22,7 @@ namespace MultipleRanker.Domain
         public ParticipantRankingModel(Guid id, string name)
         {
             Id = id;
-           Name = name;
+            Name = name;
         }
 
         public static ParticipantRankingModel For(RankingBoardParticipantSnapshot snapshot)
@@ -37,19 +37,24 @@ namespace MultipleRanker.Domain
             TotalScoreFor += score;
             TotalScoreAgainst += opponentScore;
 
-            if (score > opponentScore)
-                AddOrUpdateDictionary(TotalWinsByOpponentId, opponentId, (x) => x += 1, 1);
+            AddOrUpdateDictionary(
+                TotalWinsByOpponentId,
+                opponentId,
+                (x) => x += score > opponentScore ? 1 : 0,
+                score > opponentScore ? 1 : 0);
 
-            if (score < opponentScore)
-                AddOrUpdateDictionary(TotalLosesByOpponentId, opponentId, (x) => x += 1, 1);
+            AddOrUpdateDictionary(
+                TotalLosesByOpponentId,
+                opponentId,
+                (x) => x += score < opponentScore ? 1 : 0,
+                score < opponentScore ? 1 : 0);
 
-            if(score == opponentScore)
+            if (score == opponentScore)
                 throw new NotImplementedException("Draws not yet supported");
 
             AddOrUpdateDictionary(TotalScoreByOpponentId, opponentId, (x) => x += score, score);
 
             AddOrUpdateDictionary(TotalScoreConcededByOpponentId, opponentId, (x) => x += opponentScore, opponentScore);
-
         }
 
         public RankingBoardParticipantSnapshot ToSnapshot()
@@ -82,9 +87,9 @@ namespace MultipleRanker.Domain
         }
 
         private void AddOrUpdateDictionary(
-            IDictionary<Guid, int> toUpdate, 
-            Guid opponentId, 
-            Func<int, int> updateFunc, 
+            IDictionary<Guid, int> toUpdate,
+            Guid opponentId,
+            Func<int, int> updateFunc,
             int addValue)
         {
             if (toUpdate.TryGetValue(opponentId, out var value))
