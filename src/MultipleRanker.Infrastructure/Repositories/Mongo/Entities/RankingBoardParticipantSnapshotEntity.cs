@@ -16,6 +16,9 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
         public string Name { get; set; }
 
         [DataMember]
+        public int Index { get; set; }
+
+        [DataMember]
         public long TotalScoreFor { get; set; }
 
         [DataMember]

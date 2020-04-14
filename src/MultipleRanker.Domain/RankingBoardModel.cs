@@ -13,6 +13,7 @@ namespace MultipleRanker.Domain
         private long _matchUpsCompleted;
         private long _numberOfRatingsPerformed;
         private DateTime _lastRatingCalculatedAt;
+        private int _maxParticipantIndex;
 
         public RankingBoardModel()
         {
@@ -28,6 +29,7 @@ namespace MultipleRanker.Domain
             _matchUpsCompleted = snapshot.MatchUpsCompleted;
             _lastRatingCalculatedAt = snapshot.LastRatingCalculatedAt;
             _numberOfRatingsPerformed = snapshot.NumberOfRatingsPerformed;
+            _maxParticipantIndex = snapshot.MaxParticipantIndex;
         }
 
         public static RankingBoardModel For(RankingBoardSnapshot snapshot)
@@ -68,7 +70,9 @@ namespace MultipleRanker.Domain
 
         public void Apply(AddParticipantToRankingBoardCommand cmd)
         {
-            var participantRankingModel = new ParticipantRankingModel(cmd.ParticipantId, cmd.ParticipantName);
+            var participantRankingModel = new ParticipantRankingModel(cmd.ParticipantId, cmd.ParticipantName, _maxParticipantIndex);
+
+            _maxParticipantIndex++;
 
             ParticipantRankingModels.Add(participantRankingModel);
         }
@@ -83,7 +87,8 @@ namespace MultipleRanker.Domain
                     .ToList(),
                 MatchUpsCompleted = _matchUpsCompleted,
                 NumberOfRatingsPerformed = _numberOfRatingsPerformed,
-                LastRatingCalculatedAt = _lastRatingCalculatedAt
+                LastRatingCalculatedAt = _lastRatingCalculatedAt,
+                MaxParticipantIndex = _maxParticipantIndex
             };
         }
     }

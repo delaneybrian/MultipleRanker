@@ -5,23 +5,23 @@ using System.Threading.Tasks;
 using MediatR;
 using MultipleRanker.Definitions.Commands;
 using MultipleRanker.Domain;
-using MultipleRanker.Domain.Rankers;
+using MultipleRanker.Domain.Raters;
 using MultipleRanker.Interfaces;
 
 namespace MultipleRanker.Application.CommandHandlers
 {
     public class GenerateRatingsForRankingBoardCommandHandler : AsyncRequestHandler<GenerateRatingsForRankingBoardCommand>
     {
-        private readonly IEnumerable<IRanker> _rankers;
+        private readonly IEnumerable<IRater> _raters;
         private readonly IRankingBoardSnapshotRepository _rankingBoardSnapshotRepository;
         private readonly ICommandPublisher _commandPublisher;
 
-        public GenerateRatingsForRankingBoardCommandHandler(IEnumerable<IRanker> rankers,
+        public GenerateRatingsForRankingBoardCommandHandler(IEnumerable<IRater> raters,
             IRankingBoardSnapshotRepository rankingBoardSnapshotRepository,
             ICommandPublisher commandPublisher
             )
         {
-            _rankers = rankers;
+            _raters = raters;
             _rankingBoardSnapshotRepository = rankingBoardSnapshotRepository;
             _commandPublisher = commandPublisher;
         }
@@ -34,9 +34,9 @@ namespace MultipleRanker.Application.CommandHandlers
 
             rankingBoardModel.Apply(cmd);
 
-            var ranker = _rankers.Single(r => r.IsFor(cmd.RankerType.ToRankerType()));
+            var ranker = _raters.Single(r => r.IsFor(cmd.RankerType.ToRankerType()));
 
-            var ratingsResults = ranker.Rank(rankingBoardModel);
+            var ratingsResults = ranker.Rate(rankingBoardModel);
 
             var ratingsGeneratedCommand = ratingsResults.ToCommand();
 

@@ -14,6 +14,9 @@ namespace MultipleRanker.Definitions.Snapshots
         public string Name { get; set; }
 
         [DataMember]
+        public int Index { get; set; }
+
+        [DataMember]
         public long TotalScoreFor { get; set; }
 
         [DataMember]

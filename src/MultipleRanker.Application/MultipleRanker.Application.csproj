@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MultipleRanker.Definitions\MultipleRanker.Definitions.csproj" />
-    <ProjectReference Include="..\MultipleRanker.Domain.Rankers\MultipleRanker.Domain.Rankers.csproj" />
+    <ProjectReference Include="..\MultipleRanker.Domain.Raters\MultipleRanker.Domain.Raters.csproj" />
     <ProjectReference Include="..\MultipleRanker.Domain\MultipleRanker.Domain.csproj" />
     <ProjectReference Include="..\MultipleRanker.Interfaces\MultipleRanker.Interfaces.csproj" />
   </ItemGroup>

@@ -22,5 +22,8 @@ namespace MultipleRanker.Definitions.Snapshots
 
         [DataMember]
         public DateTime LastRatingCalculatedAt { get; set; }
+
+        [DataMember]
+        public int MaxParticipantIndex { get; set; }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace MultipleRanker.Domain.Rankers
+﻿namespace MultipleRanker.Domain.Raters
 {
-    public enum RankerType
+    public enum RaterType
     {
         Unset = 0,
         OffensiveDefensive = 1,

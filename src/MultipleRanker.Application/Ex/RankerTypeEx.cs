@@ -1,24 +1,24 @@
 ﻿using System;
-using MultipleRanker.Domain.Rankers;
+using MultipleRanker.Domain.Raters;
 
 namespace MultipleRanker.Application
 {
     internal static class RankerTypeEx
     {
-        public static RankerType ToRankerType(this Definitions.RatingType rankerType)
+        public static RaterType ToRankerType(this Definitions.RatingType rankerType)
         {
             switch (rankerType)
             {
                 case (Definitions.RatingType.ColleyMethod):
-                    return RankerType.ColleyMethod;
+                    return RaterType.ColleyMethod;
                 case (Definitions.RatingType.MarkovMethod):
-                    return RankerType.MarkovMethod;
+                    return RaterType.MarkovMethod;
                 case (Definitions.RatingType.MasseyMethod):
-                    return RankerType.MasseyMethod;
+                    return RaterType.MasseyMethod;
                 case (Definitions.RatingType.KeenerMethod):
-                    return RankerType.KeenerMethod;
+                    return RaterType.KeenerMethod;
                 case (Definitions.RatingType.OffensiveDefensive):
-                    return RankerType.OffensiveDefensive;
+                    return RaterType.OffensiveDefensive;
                 default:
                     throw new ArgumentException($"{rankerType.ToString()} is not a valid RankerType");
             }

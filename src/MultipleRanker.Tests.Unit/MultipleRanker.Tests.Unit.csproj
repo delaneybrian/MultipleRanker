@@ -14,11 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MultipleRanker.Domain.Raters\MultipleRanker.Domain.Raters.csproj" />
     <ProjectReference Include="..\MultipleRanker.Domain\MultipleRanker.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="NCAAResults.csv">
+    <None Update="Files\NCAAResults.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

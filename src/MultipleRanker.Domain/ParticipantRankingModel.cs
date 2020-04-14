@@ -10,6 +10,8 @@ namespace MultipleRanker.Domain
 
         public string Name { get; private set; }
 
+        public int Index { get; private set; }
+
         public long TotalScoreFor { get; private set; }
         public long TotalScoreAgainst { get; private set; }
         public int TotalGamesPlayed { get; private set; }
@@ -19,10 +21,11 @@ namespace MultipleRanker.Domain
         public IDictionary<Guid, int> TotalScoreConcededByOpponentId { get; private set; } = new Dictionary<Guid, int>();
         public IDictionary<Guid, int> TotalLosesByOpponentId { get; private set; } = new Dictionary<Guid, int>();
 
-        public ParticipantRankingModel(Guid id, string name)
+        public ParticipantRankingModel(Guid id, string name, int index)
         {
             Id = id;
             Name = name;
+            Index = index;
         }
 
         public static ParticipantRankingModel For(RankingBoardParticipantSnapshot snapshot)
@@ -63,6 +66,7 @@ namespace MultipleRanker.Domain
             {
                 Id = Id,
                 Name = Name,
+                Index = Index,
                 TotalGamesPlayed = TotalGamesPlayed,
                 TotalScoreFor = TotalScoreFor,
                 TotalScoreAgainst = TotalScoreAgainst,
@@ -77,9 +81,9 @@ namespace MultipleRanker.Domain
         {
             Id = snapshot.Id;
             Name = snapshot.Name;
+            Index = snapshot.Index;
             TotalScoreFor = snapshot.TotalScoreFor;
             TotalScoreAgainst = snapshot.TotalScoreAgainst;
-
             TotalScoreByOpponentId = snapshot.TotalScoreByOpponentId;
             TotalScoreConcededByOpponentId = snapshot.TotalScoreConcededByOpponentId;
             TotalLosesByOpponentId = snapshot.TotalLosesByOpponentId;

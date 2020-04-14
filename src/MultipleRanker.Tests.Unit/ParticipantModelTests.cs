@@ -28,7 +28,7 @@ namespace MultipleRanker.Tests.Unit
 
             public TestContext()
             {
-                _sut = new ParticipantRankingModel(Guid.NewGuid(), "Test Participant");
+                _sut = new ParticipantRankingModel(Guid.NewGuid(), "Test Participant", 1);
             }
 
             public TestContext SetOpponentParticipantId(Guid opponentId)

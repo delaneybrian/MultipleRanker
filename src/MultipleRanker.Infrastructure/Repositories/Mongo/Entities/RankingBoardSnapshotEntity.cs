@@ -24,5 +24,8 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 
         [DataMember]
         public DateTime LastRatingCalculatedAt { get; set; }
+
+        [DataMember]
+        public int MaxParticipantIndex { get; set; }
     }
 }
