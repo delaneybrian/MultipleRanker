@@ -22,13 +22,13 @@ namespace MultipleRanker.Tests.Unit
 
         public class TestContext
         {
-            private ParticipantRankingModel _sut;
+            private ParticipantRatingModel _sut;
 
             private Guid _opponentId;
 
             public TestContext()
             {
-                _sut = new ParticipantRankingModel(Guid.NewGuid(), "Test Participant", 1);
+                _sut = new ParticipantRatingModel(Guid.NewGuid(), "Test Participant", 1);
             }
 
             public TestContext SetOpponentParticipantId(Guid opponentId)

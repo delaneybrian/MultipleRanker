@@ -18,7 +18,7 @@ namespace MultipleRanker.Application.CommandHandlers
 
         protected override async Task Handle(CreateRankingBoardCommand command, CancellationToken cancellationToken)
         {
-            var model = new RankingBoardModel();
+            var model = new RatingBoardModel();
 
             model.Apply(command);
 

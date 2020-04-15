@@ -156,7 +156,7 @@ namespace MultipleRanker.Tests.Integration
             private readonly HashSet<Guid> _participantIds
                 = new HashSet<Guid>();
 
-            private RankingBoardModel _sut;
+            private RatingBoardModel _sut;
 
             private readonly Guid _rankingBoardId;
 
@@ -164,7 +164,7 @@ namespace MultipleRanker.Tests.Integration
             
             public TestContext()
             {
-                _sut = new RankingBoardModel();
+                _sut = new RatingBoardModel();
 
                 _rankingBoardId = Guid.NewGuid();
             }

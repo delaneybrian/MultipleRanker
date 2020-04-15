@@ -6,25 +6,25 @@ using MultipleRanker.Definitions.Commands;
 
 namespace MultipleRanker.Domain
 {
-    public class RankingBoardModel : AggregateBase
+    public class RatingBoardModel : AggregateBase
     {
         public Guid Id { get; private set; }
-        public List<ParticipantRankingModel> ParticipantRankingModels { get; private set; } = new List<ParticipantRankingModel>();
+        public List<ParticipantRatingModel> ParticipantRatingModels { get; private set; } = new List<ParticipantRatingModel>();
         private long _matchUpsCompleted;
         private long _numberOfRatingsPerformed;
         private DateTime _lastRatingCalculatedAt;
         private int _maxParticipantIndex;
 
-        public RankingBoardModel()
+        public RatingBoardModel()
         {
             
         }
 
-        private RankingBoardModel(RankingBoardSnapshot snapshot)
+        private RatingBoardModel(RankingBoardSnapshot snapshot)
         {
             Id = snapshot.Id;
             ParticipantRankingModels = snapshot.RankingBoardParticipants
-                .Select(participantSnapshot => ParticipantRankingModel.For(participantSnapshot))
+                .Select(participantSnapshot => ParticipantRatingModel.For(participantSnapshot))
                 .ToList();
             _matchUpsCompleted = snapshot.MatchUpsCompleted;
             _lastRatingCalculatedAt = snapshot.LastRatingCalculatedAt;
@@ -32,9 +32,9 @@ namespace MultipleRanker.Domain
             _maxParticipantIndex = snapshot.MaxParticipantIndex;
         }
 
-        public static RankingBoardModel For(RankingBoardSnapshot snapshot)
+        public static RatingBoardModel For(RankingBoardSnapshot snapshot)
         {
-            return new RankingBoardModel(snapshot);
+            return new RatingBoardModel(snapshot);
         }
 
         public void Apply(CreateRankingBoardCommand cmd)
@@ -55,7 +55,7 @@ namespace MultipleRanker.Domain
 
             foreach (var matchUpParticipantScore in cmd.ParticipantScores)
             {
-                var participantRankingModel = ParticipantRankingModels.Single(x => x.Id == matchUpParticipantScore.ParticipantId);
+                var participantRankingModel = ParticipantRatingModels.Single(x => x.Id == matchUpParticipantScore.ParticipantId);
 
                 foreach (var opponentMatchUpParticipantScore in cmd.ParticipantScores
                     .Where(x => x.ParticipantId != matchUpParticipantScore.ParticipantId))
@@ -70,11 +70,11 @@ namespace MultipleRanker.Domain
 
         public void Apply(AddParticipantToRankingBoardCommand cmd)
         {
-            var participantRankingModel = new ParticipantRankingModel(cmd.ParticipantId, cmd.ParticipantName, _maxParticipantIndex);
+            var participantRankingModel = new ParticipantRatingModel(cmd.ParticipantId, cmd.ParticipantName, _maxParticipantIndex);
 
             _maxParticipantIndex++;
 
-            ParticipantRankingModels.Add(participantRankingModel);
+            ParticipantRatingModels.Add(participantRankingModel);
         }
 
         public RankingBoardSnapshot ToSnapshot()
@@ -82,7 +82,7 @@ namespace MultipleRanker.Domain
             return new RankingBoardSnapshot
             {
                 Id = Id,
-                RankingBoardParticipants = ParticipantRankingModels
+                RankingBoardParticipants = ParticipantRatingModels
                     .Select(rankingModel => rankingModel.ToSnapshot())
                     .ToList(),
                 MatchUpsCompleted = _matchUpsCompleted,

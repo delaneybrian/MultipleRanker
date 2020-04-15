@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MultipleRanker.Definitions;
 
 namespace MultipleRanker.Domain.Raters
 {
-    public class OffensiveDefensiveRatercs : IRater
+    public class OffensiveDefensiveRaters : IRater
     {
-        private const int iterationMax = 1000;
-
         private Vector<double> _defensiveRatings;
 
         private Vector<double> _offensiveRatings;
@@ -24,9 +23,9 @@ namespace MultipleRanker.Domain.Raters
             return rankerType == RaterType.OffensiveDefensive;
         }
 
-        public RatingResults Rate(RankingBoardModel rankingBoardModel)
+        public IEnumerable<ParticipantRating> Rate(RatingBoardModel ratingBoardModel)
         {
-            _results = GenerateTotalScoreMatrix(rankingBoardModel);
+            _results = GenerateTotalScoreMatrix(ratingBoardModel);
 
             _defensiveRatings = Vector<double>.Build.Dense(_results.ColumnCount, 1);
 
@@ -38,7 +37,36 @@ namespace MultipleRanker.Domain.Raters
 
             Solve();
 
-            return new RatingResults();
+            var finalRatings = CombineRatings();
+
+            return CreateRatingResults(ratingBoardModel, finalRatings);
+        }
+
+        private IEnumerable<ParticipantRating> CreateRatingResults(RatingBoardModel rankingBoardModel, Vector<double> finalRatings)
+        {
+            var i = 0;
+            foreach(var participant in rankingBoardModel.ParticipantRankingModels)
+            {
+                yield return new ParticipantRating
+                {
+                    ParticipantId = participant.Id,
+                    Rating = finalRatings[i]
+                };
+
+                i++;
+            }
+        }
+
+        private Vector<double> CombineRatings()
+        {
+            var finalRatings = Vector<double>.Build.Dense(_defensiveRatings.Count);
+
+            for (var i = 0; i < 5; i++)
+            {
+                finalRatings[i] = _offensiveRatings[i] / _defensiveRatings[i];
+            }
+
+            return finalRatings;
         }
 
         private void Solve()
@@ -119,7 +147,7 @@ namespace MultipleRanker.Domain.Raters
             return true;
         }
 
-        private Matrix<double> GenerateTotalScoreMatrix(RankingBoardModel rankingRankingBoardModel)
+        private Matrix<double> GenerateTotalScoreMatrix(RatingBoardModel rankingRankingBoardModel)
         {
             var numberOfParticipants = rankingRankingBoardModel.ParticipantRankingModels.Count;
 

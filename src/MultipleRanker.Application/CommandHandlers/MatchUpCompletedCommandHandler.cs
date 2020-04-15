@@ -20,7 +20,7 @@ namespace MultipleRanker.Application.CommandHandlers
         {
             var rankingBoardSnapshot = await _rankingBoardSnapshotRepository.Get(cmd.RankingBoardId);
 
-            var rankingBoardModel = RankingBoardModel.For(rankingBoardSnapshot);
+            var rankingBoardModel = RatingBoardModel.For(rankingBoardSnapshot);
 
             rankingBoardModel.Apply(cmd);
 

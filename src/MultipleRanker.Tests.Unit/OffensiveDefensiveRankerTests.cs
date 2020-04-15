@@ -39,27 +39,27 @@ namespace MultipleRanker.Tests.Unit
             private readonly HashSet<TempParticipant> _partitipcants
                 = new HashSet<TempParticipant>();
 
-            private OffensiveDefensiveRatercs _sut;
+            private OffensiveDefensiveRaters _sut;
 
-            private readonly Guid _rankingBoardId;
+            private readonly Guid _ratingBoardId;
 
-            private RankingBoardModel _rankingBoardModel;
+            private RatingBoardModel _ratingBoardModel;
 
-            private RatingResults _ratingResults;
+            private IEnumerable<ParticipantRating> _ratingResults;
 
             public TestContext()
             {
-                _rankingBoardModel = new RankingBoardModel();
+                _ratingBoardModel = new RatingBoardModel();
 
-                _sut = new OffensiveDefensiveRatercs();
+                _sut = new OffensiveDefensiveRaters();
 
-                _rankingBoardId = Guid.NewGuid();
+                _ratingBoardId = Guid.NewGuid();
             }
 
             public TestContext Rate()
             {
                 _ratingResults = _sut
-                    .Rate(_rankingBoardModel);
+                    .Rate(_ratingBoardModel);
 
                 return this;
             }
@@ -68,11 +68,11 @@ namespace MultipleRanker.Tests.Unit
             {
                 var createRankingBoardCommand = new CreateRankingBoardCommand
                 {
-                    Id = _rankingBoardId,
+                    Id = _ratingBoardId,
                     Name = "Test Ranking Board"
                 };
 
-                _rankingBoardModel.Apply(createRankingBoardCommand);
+                _ratingBoardModel.Apply(createRankingBoardCommand);
 
                 return this;
             }
@@ -85,10 +85,10 @@ namespace MultipleRanker.Tests.Unit
                     {
                         ParticipantId = participant.Id,
                         ParticipantName = participant.Name,
-                        RankingBoardId = _rankingBoardId
+                        RankingBoardId = _ratingBoardId
                     };
 
-                    _rankingBoardModel.Apply(addParticipantToRankingBoard);
+                    _ratingBoardModel.Apply(addParticipantToRankingBoard);
                 }
 
                 return this;
@@ -100,7 +100,7 @@ namespace MultipleRanker.Tests.Unit
                 {
                     var matchUpCompletedCommand = new MatchUpCompletedCommand
                     {
-                        RankingBoardId = _rankingBoardId,
+                        RankingBoardId = _ratingBoardId,
                         ParticipantScores = new List<MatchUpParticipantScore>
                         {
                             new MatchUpParticipantScore
@@ -116,7 +116,7 @@ namespace MultipleRanker.Tests.Unit
                         }
                     };
 
-                    _rankingBoardModel.Apply(matchUpCompletedCommand);
+                    _ratingBoardModel.Apply(matchUpCompletedCommand);
                 }
 
                 return this;

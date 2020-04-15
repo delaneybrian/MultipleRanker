@@ -1,4 +1,5 @@
 ﻿using MultipleRanker.Definitions;
+using System.Collections.Generic;
 
 namespace MultipleRanker.Domain.Raters
 {
@@ -6,6 +7,6 @@ namespace MultipleRanker.Domain.Raters
     {
         bool IsFor(RaterType rankerType);
 
-        RatingResults Rate(RankingBoardModel rankingBoardModel);
+        IEnumerable<ParticipantRating> Rate(RatingBoardModel rankingBoardModel);
     }
 }

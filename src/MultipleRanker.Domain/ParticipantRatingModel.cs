@@ -4,7 +4,7 @@ using MultipleRanker.Definitions.Snapshots;
 
 namespace MultipleRanker.Domain
 {
-    public class ParticipantRankingModel
+    public class ParticipantRatingModel
     {
         public Guid Id { get; private set; }
 
@@ -21,16 +21,16 @@ namespace MultipleRanker.Domain
         public IDictionary<Guid, int> TotalScoreConcededByOpponentId { get; private set; } = new Dictionary<Guid, int>();
         public IDictionary<Guid, int> TotalLosesByOpponentId { get; private set; } = new Dictionary<Guid, int>();
 
-        public ParticipantRankingModel(Guid id, string name, int index)
+        public ParticipantRatingModel(Guid id, string name, int index)
         {
             Id = id;
             Name = name;
             Index = index;
         }
 
-        public static ParticipantRankingModel For(RankingBoardParticipantSnapshot snapshot)
+        public static ParticipantRatingModel For(RankingBoardParticipantSnapshot snapshot)
         {
-            return new ParticipantRankingModel(snapshot);
+            return new ParticipantRatingModel(snapshot);
         }
 
         public void AddResultVersus(Guid opponentId, int score, int opponentScore)
@@ -77,7 +77,7 @@ namespace MultipleRanker.Domain
             };
         }
 
-        private ParticipantRankingModel(RankingBoardParticipantSnapshot snapshot)
+        private ParticipantRatingModel(RankingBoardParticipantSnapshot snapshot)
         {
             Id = snapshot.Id;
             Name = snapshot.Name;
