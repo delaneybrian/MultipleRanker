@@ -30,6 +30,12 @@ namespace MultipleRanker.Tests.Integration
 
             private readonly string ExchangeName = "multipleranker";
 
+            public TestContext()
+            {
+                var factory = new ConnectionFactory() { HostName = "localhost" };
+                _connection = factory.CreateConnection();
+            }
+
             public TestContext PublishCreateRatingBoard()
             {
                 var correlationId = Guid.NewGuid();
