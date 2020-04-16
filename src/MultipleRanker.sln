@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultipleRanker.Definitions"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultipleRanker.Infrastructure", "MultipleRanker.Infrastructure\MultipleRanker.Infrastructure.csproj", "{30EAD98B-3B1B-45D5-A250-353F75DA7AC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultipleRanker.Host.Console", "MultipleRanker.Host.Console\MultipleRanker.Host.Console.csproj", "{9204F773-C770-4FE5-AE90-B3F3BD703C12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultipleRanker.Host", "MultipleRanker.Host.Console\MultipleRanker.Host.csproj", "{9204F773-C770-4FE5-AE90-B3F3BD703C12}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F9FC45C5-750F-4FDE-BDB0-44E6913CFA68}"
 EndProject
@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultipleRanker.Tests.Unit",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultipleRanker.Tests.Integration", "MultipleRanker.Tests.Integration\MultipleRanker.Tests.Integration.csproj", "{848AEAA8-D426-4381-BD66-ED695B25C8BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultipleRanker.Domain.Raters", "MultipleRanker.Domain.Raters\MultipleRanker.Domain.Raters.csproj", "{ECAF229F-B7CB-45AE-B0DF-1CC1461DC173}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MultipleRanker.Domain.Raters", "MultipleRanker.Domain.Raters\MultipleRanker.Domain.Raters.csproj", "{ECAF229F-B7CB-45AE-B0DF-1CC1461DC173}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

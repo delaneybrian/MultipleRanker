@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading;
 
 namespace MultipleRanker.Interfaces
 {
     public interface IMessageSubscriber
     {
+        void Start(CancellationToken cancellationToken);
     }
 }

@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace MultipleRanker.Definitions.Snapshots
 {
     [DataContract]
-    public class RankingBoardParticipantSnapshot
+    public class RatingBoardParticipantSnapshot
     {
         [DataMember]
         public Guid Id { get; set; }

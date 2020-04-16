@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading;
+using MediatR;
+using MultipleRanker.Contracts;
 using MultipleRanker.Interfaces;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -10,15 +14,15 @@ namespace MultipleRanker.Infrastructure.Messaging
     public class RabbitMQMessageSubscriber : IMessageSubscriber
     {
         private readonly IConnection _connection;
-        private readonly IDispatcher _dispatcher;
+        private readonly IMessageDispatcher _messageDispatcher;
         private readonly ICollection<string> _subscribedTo;
         private readonly ISerializer _serializer;
 
-        private readonly string ExchangeName = "eventdrivo";
+        private readonly string ExchangeName = "multipleranker";
 
         public RabbitMQMessageSubscriber(
             ICollection<string> subscribedTo,
-            IDispatcher dispatcher,
+            IMessageDispatcher messageDispatcher,
             ISerializer serializer)
         {
             var factory = new ConnectionFactory() { HostName = "localhost" };
@@ -26,13 +30,11 @@ namespace MultipleRanker.Infrastructure.Messaging
 
             _subscribedTo = subscribedTo;
 
-            _dispatcher = dispatcher;
+            _messageDispatcher = messageDispatcher;
             _serializer = serializer;
-
-            Listen();
         }
 
-        private void Listen()
+        public void Start(CancellationToken cancellationToken)
         {
             using (var channel = _connection.CreateModel())
             {
@@ -59,13 +61,11 @@ namespace MultipleRanker.Infrastructure.Messaging
 
                     var type = Type.GetType(message.AssemblyQualifiedName);
 
-                    object data;
-                    using (var stream = new MemoryStream(message.Content))
-                    {
-                        data = ProtoBuf.Serializer.Deserialize(type, stream);
-                    }
+                    var messageContent = Encoding.UTF8.GetString(message.Content.ToArray());
 
-                    _dispatcher.DispatchMessage(data);
+                    var obj = _serializer.Deserialize(type, messageContent) as IRequest;
+
+                    _messageDispatcher.DispatchMessage(obj);
                 };
 
                 channel.BasicConsume(

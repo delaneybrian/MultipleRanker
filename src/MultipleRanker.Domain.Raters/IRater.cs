@@ -1,5 +1,5 @@
-﻿using MultipleRanker.Definitions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MultipleRanker.Contracts;
 
 namespace MultipleRanker.Domain.Raters
 {

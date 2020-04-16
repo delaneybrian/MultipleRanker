@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
-using MultipleRanker.Definitions;
+using MultipleRanker.Contracts;
 
 namespace MultipleRanker.Domain.Raters
 {
@@ -45,7 +45,7 @@ namespace MultipleRanker.Domain.Raters
         private IEnumerable<ParticipantRating> CreateRatingResults(RatingBoardModel rankingBoardModel, Vector<double> finalRatings)
         {
             var i = 0;
-            foreach(var participant in rankingBoardModel.ParticipantRankingModels)
+            foreach(var participant in rankingBoardModel.ParticipantRatingModels)
             {
                 yield return new ParticipantRating
                 {
@@ -147,20 +147,20 @@ namespace MultipleRanker.Domain.Raters
             return true;
         }
 
-        private Matrix<double> GenerateTotalScoreMatrix(RatingBoardModel rankingRankingBoardModel)
+        private Matrix<double> GenerateTotalScoreMatrix(RatingBoardModel ratingRankingBoardModel)
         {
-            var numberOfParticipants = rankingRankingBoardModel.ParticipantRankingModels.Count;
+            var numberOfParticipants = ratingRankingBoardModel.ParticipantRatingModels.Count;
 
             var scoreMatrix = Matrix<double>.Build.Dense(numberOfParticipants, numberOfParticipants);
 
             int i = 0;
-            foreach (var participantRankingModel in rankingRankingBoardModel
-                .ParticipantRankingModels
+            foreach (var participantRankingModel in ratingRankingBoardModel
+                .ParticipantRatingModels
                 .OrderBy(x => x.Index))
             {
                 int j = 0;
-                foreach (var opponentParticipantRankingModel in rankingRankingBoardModel
-                    .ParticipantRankingModels
+                foreach (var opponentParticipantRankingModel in ratingRankingBoardModel
+                    .ParticipantRatingModels
                     .OrderBy(x => x.Index))
                 {
                     if (participantRankingModel.Id == opponentParticipantRankingModel.Id)

@@ -1,4 +1,4 @@
-﻿namespace MultipleRanker.Definitions
+﻿namespace MultipleRanker.Contracts
 {
     public enum RatingType
     {

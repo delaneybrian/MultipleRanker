@@ -2,7 +2,7 @@
 using MultipleRanker.Infrastructure.Messaging;
 using MultipleRanker.Interfaces;
 
-namespace MultipleRanker.Host.Console.IoC
+namespace MultipleRanker.Host
 {
     internal class MessagingModule : Module
     {
@@ -17,6 +17,14 @@ namespace MultipleRanker.Host.Console.IoC
                 .RegisterType<RabbitMQMessageSubscriber>()
                 .As<IMessageSubscriber>()
                 .SingleInstance();
+
+            builder
+                .RegisterType<MediatRDispatcher>()
+                .As<IMessageDispatcher>();
+
+            builder
+                .RegisterType<SystemJsonSerializer>()
+                .As<ISerializer>();
         }
     }
 }

@@ -3,8 +3,8 @@ using MediatR;
 
 namespace MultipleRanker.Interfaces
 {
-    public interface ICommandPublisher
+    public interface IMessageDispatcher
     {
-        Task Publish(IRequest cmd);
+        Task DispatchMessage(IRequest cmd);
     }
 }

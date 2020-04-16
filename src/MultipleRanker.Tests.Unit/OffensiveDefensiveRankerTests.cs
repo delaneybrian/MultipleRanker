@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using MultipleRanker.Definitions;
-using MultipleRanker.Definitions.Commands;
+using MultipleRanker.Contracts;
+using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Domain;
 using MultipleRanker.Domain.Raters;
 using NUnit.Framework;
@@ -66,10 +65,10 @@ namespace MultipleRanker.Tests.Unit
 
             public TestContext CreateRankingBoard()
             {
-                var createRankingBoardCommand = new CreateRankingBoardCommand
+                var createRankingBoardCommand = new CreateRatingBoard
                 {
                     Id = _ratingBoardId,
-                    Name = "Test Ranking Board"
+                    Name = "Test Rating Board"
                 };
 
                 _ratingBoardModel.Apply(createRankingBoardCommand);
@@ -81,14 +80,14 @@ namespace MultipleRanker.Tests.Unit
             {
                 foreach (var participant in _partitipcants)
                 {
-                    var addParticipantToRankingBoard = new AddParticipantToRankingBoardCommand
+                    var addParticipantToRatingBoard = new AddParticipantToRatingBoard
                     {
                         ParticipantId = participant.Id,
                         ParticipantName = participant.Name,
                         RankingBoardId = _ratingBoardId
                     };
 
-                    _ratingBoardModel.Apply(addParticipantToRankingBoard);
+                    _ratingBoardModel.Apply(addParticipantToRatingBoard);
                 }
 
                 return this;
@@ -98,9 +97,9 @@ namespace MultipleRanker.Tests.Unit
             {
                 foreach (var matchUp in _tempMatchUps)
                 {
-                    var matchUpCompletedCommand = new MatchUpCompletedCommand
+                    var matchUpCompletedCommand = new MatchUpCompleted
                     {
-                        RankingBoardId = _ratingBoardId,
+                        RatingBoardId = _ratingBoardId,
                         ParticipantScores = new List<MatchUpParticipantScore>
                         {
                             new MatchUpParticipantScore

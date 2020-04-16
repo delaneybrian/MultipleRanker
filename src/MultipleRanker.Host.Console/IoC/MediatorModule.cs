@@ -3,7 +3,7 @@ using Autofac;
 using MediatR;
 using Module = Autofac.Module;
 
-namespace MultipleRanker.Host.Console
+namespace MultipleRanker.Host
 {
     internal class MediatorModule : Module
     {

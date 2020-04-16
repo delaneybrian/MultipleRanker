@@ -11,10 +11,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MultipleRanker.Contracts\MultipleRanker.Contracts.csproj" />
     <ProjectReference Include="..\MultipleRanker.Domain\MultipleRanker.Domain.csproj" />
+    <ProjectReference Include="..\MultipleRanker.Infrastructure\MultipleRanker.Infrastructure.csproj" />
+    <ProjectReference Include="..\MultipleRanker.Interfaces\MultipleRanker.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

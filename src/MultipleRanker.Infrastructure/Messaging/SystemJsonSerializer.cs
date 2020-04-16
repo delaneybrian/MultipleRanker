@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using MultipleRanker.Interfaces;
 
 namespace MultipleRanker.Infrastructure.Messaging
@@ -13,6 +14,11 @@ namespace MultipleRanker.Infrastructure.Messaging
         public T Deserialize<T>(string content)
         {
             return JsonSerializer.Deserialize<T>(content);
+        }
+
+        public object Deserialize(Type type, string content)
+        {
+            return JsonSerializer.Deserialize(content, type);
         }
     }
 }

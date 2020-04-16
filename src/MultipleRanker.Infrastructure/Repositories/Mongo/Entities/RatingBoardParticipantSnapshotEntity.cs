@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 {
     [DataContract]
-    internal class RankingBoardParticipantSnapshotEntity
+    internal class RatingBoardParticipantSnapshotEntity
     {
         [BsonId]
         [DataMember]

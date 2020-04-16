@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace MultipleRanker.Definitions
+namespace MultipleRanker.Contracts
 {
     [DataContract]
-    public class ParticipantRating
+    public class MatchUpParticipantScore
     {
         [DataMember]
         public Guid ParticipantId { get; set; }
 
         [DataMember]
-        public double Rating { get; set; }
+        public int PointsScored { get; set; }
     }
 }

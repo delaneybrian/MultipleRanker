@@ -1,7 +1,6 @@
 ﻿using Autofac;
-using MultipleRanker.Host.Console.IoC;
 
-namespace MultipleRanker.Host.Console
+namespace MultipleRanker.Host
 {
     internal static class Bootstrapper
     {

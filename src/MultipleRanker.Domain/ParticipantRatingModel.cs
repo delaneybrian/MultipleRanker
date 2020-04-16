@@ -28,7 +28,7 @@ namespace MultipleRanker.Domain
             Index = index;
         }
 
-        public static ParticipantRatingModel For(RankingBoardParticipantSnapshot snapshot)
+        public static ParticipantRatingModel For(RatingBoardParticipantSnapshot snapshot)
         {
             return new ParticipantRatingModel(snapshot);
         }
@@ -60,9 +60,9 @@ namespace MultipleRanker.Domain
             AddOrUpdateDictionary(TotalScoreConcededByOpponentId, opponentId, (x) => x += opponentScore, opponentScore);
         }
 
-        public RankingBoardParticipantSnapshot ToSnapshot()
+        public RatingBoardParticipantSnapshot ToSnapshot()
         {
-            return new RankingBoardParticipantSnapshot
+            return new RatingBoardParticipantSnapshot
             {
                 Id = Id,
                 Name = Name,
@@ -77,7 +77,7 @@ namespace MultipleRanker.Domain
             };
         }
 
-        private ParticipantRatingModel(RankingBoardParticipantSnapshot snapshot)
+        private ParticipantRatingModel(RatingBoardParticipantSnapshot snapshot)
         {
             Id = snapshot.Id;
             Name = snapshot.Name;

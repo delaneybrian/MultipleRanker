@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using MultipleRanker.Contracts;
 using MultipleRanker.Interfaces;
 using RabbitMQ.Client;
 
@@ -24,7 +25,7 @@ namespace MultipleRanker.Infrastructure.Messaging
         {
             var message = new Message()
             {
-                Content = _serializer.Serialize(content),
+                Content = Encoding.UTF8.GetBytes(_serializer.Serialize(content)),
                 RoutingKey = typeof(T).FullName,
                 CorrelationId = correlationId,
                 AssemblyQualifiedName = typeof(T).AssemblyQualifiedName

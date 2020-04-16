@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace MultipleRanker.Definitions
+namespace MultipleRanker.Contracts
 {
     [DataContract]
     public class RatingResults

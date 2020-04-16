@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Definitions.Snapshots;
-using MultipleRanker.Definitions.Commands;
 
 namespace MultipleRanker.Domain
 {
@@ -20,10 +20,10 @@ namespace MultipleRanker.Domain
             
         }
 
-        private RatingBoardModel(RankingBoardSnapshot snapshot)
+        private RatingBoardModel(RatingBoardSnapshot snapshot)
         {
             Id = snapshot.Id;
-            ParticipantRankingModels = snapshot.RankingBoardParticipants
+            ParticipantRatingModels = snapshot.RatingBoardParticipants
                 .Select(participantSnapshot => ParticipantRatingModel.For(participantSnapshot))
                 .ToList();
             _matchUpsCompleted = snapshot.MatchUpsCompleted;
@@ -32,24 +32,24 @@ namespace MultipleRanker.Domain
             _maxParticipantIndex = snapshot.MaxParticipantIndex;
         }
 
-        public static RatingBoardModel For(RankingBoardSnapshot snapshot)
+        public static RatingBoardModel For(RatingBoardSnapshot snapshot)
         {
             return new RatingBoardModel(snapshot);
         }
 
-        public void Apply(CreateRankingBoardCommand cmd)
+        public void Apply(CreateRatingBoard cmd)
         {
             Id = cmd.Id;
         }
 
-        public void Apply(GenerateRatingsForRankingBoardCommand cmd)
+        public void Apply(GenerateRatingsForRatingBoard cmd)
         {
             //todo remove dependency on DateTime here :-(
             _lastRatingCalculatedAt = DateTime.UtcNow;
             _numberOfRatingsPerformed++;
         }
 
-        public void Apply(MatchUpCompletedCommand cmd)
+        public void Apply(MatchUpCompleted cmd)
         {
             _matchUpsCompleted++;
 
@@ -68,7 +68,7 @@ namespace MultipleRanker.Domain
             }
         }
 
-        public void Apply(AddParticipantToRankingBoardCommand cmd)
+        public void Apply(AddParticipantToRatingBoard cmd)
         {
             var participantRankingModel = new ParticipantRatingModel(cmd.ParticipantId, cmd.ParticipantName, _maxParticipantIndex);
 
@@ -77,12 +77,12 @@ namespace MultipleRanker.Domain
             ParticipantRatingModels.Add(participantRankingModel);
         }
 
-        public RankingBoardSnapshot ToSnapshot()
+        public RatingBoardSnapshot ToSnapshot()
         {
-            return new RankingBoardSnapshot
+            return new RatingBoardSnapshot
             {
                 Id = Id,
-                RankingBoardParticipants = ParticipantRatingModels
+                RatingBoardParticipants = ParticipantRatingModels
                     .Select(rankingModel => rankingModel.ToSnapshot())
                     .ToList(),
                 MatchUpsCompleted = _matchUpsCompleted,

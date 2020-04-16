@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace MultipleRanker.Definitions.Snapshots
+namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 {
     [DataContract]
-    public class RankingBoardSnapshot
+    internal class RatingBoardSnapshotEntity
     {
+        [BsonId]
         [DataMember]
         public Guid Id { get; set; }
 
         [DataMember]
-        public ICollection<RankingBoardParticipantSnapshot> RankingBoardParticipants { get; set; } 
-            = new List<RankingBoardParticipantSnapshot>();
+        public ICollection<RatingBoardParticipantSnapshotEntity> RatingBoardParticipants { get; set; }
+            = new List<RatingBoardParticipantSnapshotEntity>();
 
         [DataMember]
         public long MatchUpsCompleted { get; set; }

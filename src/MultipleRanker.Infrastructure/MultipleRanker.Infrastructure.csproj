@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="MediatR" Version="8.0.1" />
     <PackageReference Include="MongoDB.Bson" Version="2.10.3" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.3" />
     <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
@@ -13,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MultipleRanker.Contracts\MultipleRanker.Contracts.csproj" />
     <ProjectReference Include="..\MultipleRanker.Interfaces\MultipleRanker.Interfaces.csproj" />
   </ItemGroup>
 

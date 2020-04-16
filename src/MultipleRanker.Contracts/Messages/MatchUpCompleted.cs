@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using MediatR;
 
-namespace MultipleRanker.Definitions.Commands
+namespace MultipleRanker.Contracts.Messages
 {
-    public class MatchUpCompletedCommand : IRequest
+    public class MatchUpCompleted : IRequest
     {
-        public Guid RankingBoardId { get; set; }
+        public Guid RatingBoardId { get; set; }
 
         public ICollection<MatchUpParticipantScore> ParticipantScores { get; set; } =
             new List<MatchUpParticipantScore>();
