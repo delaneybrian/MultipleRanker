@@ -14,23 +14,24 @@ steps:
   inputs:
     versionSpec: '5.4.0'
 
-# - task: DotNetCoreCLI@2
-#   inputs:
-#     command: 'restore'
-#     projects: '**/MultipleRanker.Host.csproj'
-#     feedsToUse: 'select'
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/*'
+    feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   inputs:
-    command: 'publish'
+    command: 'build'
     projects: '**/*.csproj'
     publishWebProjects: false
 
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: '**/MultipleRanker.Contracts/MultipleRanker.Contracts.nuspec'
+    packagesToPack: '**/MultipleRanker.Contracts/MultipleRanker.Contracts.csproj'
     versioningScheme: 'off'
+    packDestination: '$(Build.ArtifactStagingDirectory)'
 
 - task: DotNetCoreCLI@2
   inputs:
