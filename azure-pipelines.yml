@@ -25,6 +25,7 @@ steps:
     command: 'build'
     projects: '**/*.csproj'
     publishWebProjects: false
+    configuration: Release
 
 - task: NuGetCommand@2
   inputs:
