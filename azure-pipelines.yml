@@ -13,7 +13,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    projects: '**/MultipleRanker.Host'
+    projects: '**/MultipleRanker.Host.csproj'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
