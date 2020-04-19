@@ -10,6 +10,10 @@ variables:
 
 steps:
 
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: '5.4.0'
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
@@ -19,10 +23,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-
-- task: NuGetToolInstaller@1
-  inputs:
-    versionSpec: '5.4.0'
+    projects: '**/MultipleRanker.Host.csproj'
 
 - task: NuGetCommand@2
   inputs:
