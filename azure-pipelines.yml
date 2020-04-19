@@ -24,6 +24,7 @@ steps:
   inputs:
     command: 'publish'
     projects: '**/*.csproj'
+    publishWebProjects: false
 
 - task: NuGetCommand@2
   inputs:
