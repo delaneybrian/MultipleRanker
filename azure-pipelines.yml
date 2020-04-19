@@ -1,0 +1,40 @@
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: '5.4.0'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/MultipleRanker.Host.csproj'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/MultipleRanker.Host.csproj'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: '**/MultipleRanker.Contracts.csproj'
+    versioningScheme: 'off'
+
+- task: NuGetCommand@2
+  inputs:
+     command: 'push'
+     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+     nuGetFeedType: 'internal'
+     publishVstsFeed: '71e3b1d2-ec21-4283-a0e4-96808e3282dd'
+     allowPackageConflicts: true
