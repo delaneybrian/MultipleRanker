@@ -14,11 +14,11 @@ steps:
   inputs:
     versionSpec: '5.4.0'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'restore'
-    projects: '**/MultipleRanker.Host.csproj'
-    feedsToUse: 'select'
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: 'restore'
+#     projects: '**/MultipleRanker.Host.csproj'
+#     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   inputs:
