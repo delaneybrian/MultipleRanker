@@ -33,9 +33,9 @@ steps:
     packagesToPack: '**/MultipleRanker.Contracts/MultipleRanker.Contracts.csproj'
     versioningScheme: 'off'
 
-- task: DotNetCoreCLI@2
+- task: NuGetCommand@2
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: '04b9201e-67ca-4bb3-8c84-42789b5f80b4/f3f4cd1e-bbd3-4798-ab31-bfae63b787cd'
