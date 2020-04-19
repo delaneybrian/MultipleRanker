@@ -32,10 +32,9 @@ steps:
     packagesToPack: '**/MultipleRanker.Contracts/MultipleRanker.Contracts.nuspec'
     versioningScheme: 'off'
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   inputs:
-     command: 'push'
-     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-     nuGetFeedType: 'internal'
-     publishVstsFeed: '71e3b1d2-ec21-4283-a0e4-96808e3282dd'
-     allowPackageConflicts: true
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '71e3b1d2-ec21-4283-a0e4-96808e3282dd'
