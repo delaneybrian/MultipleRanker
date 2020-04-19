@@ -27,12 +27,11 @@ steps:
     publishWebProjects: false
     arguments: '--configuration Release'
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
     packagesToPack: '**/MultipleRanker.Contracts/MultipleRanker.Contracts.csproj'
     versioningScheme: 'off'
-    packDestination: '$(Build.ArtifactStagingDirectory)'
 
 - task: DotNetCoreCLI@2
   inputs:
