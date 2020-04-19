@@ -29,7 +29,7 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: '**/MultipleRanker.Contracts/MultipleRanker.Contracts.csproj'
+    packagesToPack: '**/MultipleRanker.Contracts/MultipleRanker.Contracts.nuspec'
     versioningScheme: 'off'
 
 - task: NuGetCommand@2
