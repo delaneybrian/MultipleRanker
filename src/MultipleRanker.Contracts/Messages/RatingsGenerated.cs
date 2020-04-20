@@ -11,5 +11,7 @@ namespace MultipleRanker.Contracts.Messages
         public ICollection<ParticipantRating> ParticipantRatings { get; set; }
 
         public RatingType RatingType { get; set; }
+
+        public DateTime CalculatedAtUtc { get; set; }
     }
 }
