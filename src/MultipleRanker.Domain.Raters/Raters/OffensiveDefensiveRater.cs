@@ -25,6 +25,8 @@ namespace MultipleRanker.Domain.Raters
 
         public IEnumerable<ParticipantRating> Rate(RatingBoardModel ratingBoardModel)
         {
+            var numParticipants = ratingBoardModel.ParticipantRatingModels.Count();
+
             _results = GenerateTotalScoreMatrix(ratingBoardModel);
 
             _defensiveRatings = Vector<double>.Build.Dense(_results.ColumnCount, 1);
@@ -37,7 +39,7 @@ namespace MultipleRanker.Domain.Raters
 
             Solve();
 
-            var finalRatings = CombineRatings();
+            var finalRatings = CombineRatings(numParticipants);
 
             return CreateRatingResults(ratingBoardModel, finalRatings);
         }
@@ -57,11 +59,11 @@ namespace MultipleRanker.Domain.Raters
             }
         }
 
-        private Vector<double> CombineRatings()
+        private Vector<double> CombineRatings(int numParticipants)
         {
             var finalRatings = Vector<double>.Build.Dense(_defensiveRatings.Count);
 
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < numParticipants; i++)
             {
                 finalRatings[i] = _offensiveRatings[i] / _defensiveRatings[i];
             }

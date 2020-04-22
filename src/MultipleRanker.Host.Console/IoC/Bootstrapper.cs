@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using MultipleRanker.Host.IoC;
 
 namespace MultipleRanker.Host
 {
@@ -16,6 +17,9 @@ namespace MultipleRanker.Host
 
             builder
                 .RegisterModule(new MessagingModule());
+
+            builder
+                .RegisterModule(new RatingModule());
 
             return builder.Build();
         }

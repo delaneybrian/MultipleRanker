@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,13 +15,15 @@ namespace MultipleRanker.Application.MessageHandlers
     {
         private readonly IEnumerable<IRater> _raters;
         private readonly IRatingBoardSnapshotRepository _ratingBoardSnapshotRepository;
+        private readonly IMessagePublisher _messagePublisher;
 
         public GenerateRatingsForRatingBoardHandler(IEnumerable<IRater> raters,
-            IRatingBoardSnapshotRepository ratingBoardSnapshotRepository
-            )
+            IRatingBoardSnapshotRepository ratingBoardSnapshotRepository,
+            IMessagePublisher messagePublisher)
         {
             _raters = raters;
             _ratingBoardSnapshotRepository = ratingBoardSnapshotRepository;
+            _messagePublisher = messagePublisher;
         }
 
         protected override async Task Handle(GenerateRatingsForRatingBoard cmd, CancellationToken cancellationToken)
@@ -35,9 +38,15 @@ namespace MultipleRanker.Application.MessageHandlers
 
             var ratingsResults = rater.Rate(ratingBoardModel);
 
-            //var ratingsGeneratedCommand = ratingsResults.ToCommand();
+            var ratingsGeneratedCommand = new RatingsGenerated
+            {
+                CalculatedAtUtc = DateTime.UtcNow,
+                RatingBoardId = cmd.RatingBoardId,
+                RatingType = cmd.RatingType,
+                ParticipantRatings = ratingsResults.ToList()
+            };
 
-            //await _commandPublisher.Publish(ratingsGeneratedCommand);
+            _messagePublisher.Publish(ratingsGeneratedCommand, Guid.NewGuid());
         }
     }
 }
