@@ -27,16 +27,16 @@ steps:
     publishWebProjects: false
     arguments: '--configuration Release'
 
-- task: DotNetCoreCLI@2
+task: NuGetCommand@2
   inputs:
     command: 'pack'
     packagesToPack: '**/MultipleRanker.Contracts/MultipleRanker.Contracts.csproj'
     versioningScheme: 'off'
 
-- task: DotNetCoreCLI@2
+- task: NuGetCommand@2
   inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: '5cf477e2-0565-43e7-90d9-dd224fe8394b/64a9d062-3452-4e4a-8711-69106bd6432d'
-    arguments: --skipduplicates
+     command: 'push'
+     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+     nuGetFeedType: 'internal'
+     publishVstsFeed: '5cf477e2-0565-43e7-90d9-dd224fe8394b/64a9d062-3452-4e4a-8711-69106bd6432d'
+     allowPackageConflicts: true
