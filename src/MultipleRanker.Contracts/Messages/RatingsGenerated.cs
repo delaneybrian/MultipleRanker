@@ -8,6 +8,8 @@ namespace MultipleRanker.Contracts.Messages
     {
         public Guid RatingBoardId { get; set; }
 
+        public Guid RatingId { get; set; }
+
         public ICollection<ParticipantRating> ParticipantRatings { get; set; }
 
         public RatingType RatingType { get; set; }

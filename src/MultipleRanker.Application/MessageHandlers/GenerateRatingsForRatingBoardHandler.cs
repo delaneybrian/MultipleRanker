@@ -40,6 +40,7 @@ namespace MultipleRanker.Application.MessageHandlers
 
             var ratingsGeneratedCommand = new RatingsGenerated
             {
+                RatingId = Guid.NewGuid(),
                 CalculatedAtUtc = DateTime.UtcNow,
                 RatingBoardId = cmd.RatingBoardId,
                 RatingType = cmd.RatingType,
