@@ -15,6 +15,11 @@ namespace MultipleRanker.Host.IoC
                 .RegisterAssemblyTypes(ratingAssembly)
                 .Where(t => typeof(IRater).IsAssignableFrom(t))
                 .As<IRater>();
+
+            builder
+                .RegisterAssemblyTypes(ratingAssembly)
+                .Where(t => typeof(IGenerator).IsAssignableFrom(t))
+                .As<IGenerator>();
         }
     }
 }

@@ -18,9 +18,9 @@ namespace MultipleRanker.Domain.Raters
 
         private Matrix<double> _results;
 
-        public bool IsFor(RaterType rankerType)
+        public bool IsFor(RaterType raterType)
         {
-            return rankerType == RaterType.OffensiveDefensive;
+            return raterType == RaterType.OffensiveDefensive;
         }
 
         public IEnumerable<ParticipantRating> Rate(RatingBoardModel ratingBoardModel)
