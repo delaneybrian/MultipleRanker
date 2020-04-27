@@ -10,9 +10,6 @@ namespace MultipleRanker.Host
             var builder = new ContainerBuilder();
 
             builder
-                .RegisterModule(new MediatorModule());
-
-            builder
                 .RegisterModule(new InfrastructureModule());
 
             builder

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using MediatR;
 
 namespace MultipleRanker.Contracts.Messages
 {
     [DataContract]
-    public class GenerateRatingsForRatingBoard : IRequest
+    public class GenerateRatingsForRatingBoard
     {
         [DataMember]
         public Guid RatingBoardId { get; set; }

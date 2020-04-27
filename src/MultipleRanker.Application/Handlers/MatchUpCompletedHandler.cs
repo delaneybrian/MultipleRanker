@@ -1,13 +1,11 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using System.Threading.Tasks;
 using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Domain;
 using MultipleRanker.Interfaces;
 
-namespace MultipleRanker.Application.MessageHandlers
+namespace MultipleRanker.Application.CommandHandlers
 {
-    public class MatchUpCompletedHandler : AsyncRequestHandler<MatchUpCompleted>
+    public class MatchUpCompletedHandler : IHandler<MatchUpCompleted>
     {
         private readonly IRatingBoardSnapshotRepository _ratingBoardSnapshotRepository;
 
@@ -16,13 +14,13 @@ namespace MultipleRanker.Application.MessageHandlers
             _ratingBoardSnapshotRepository = ratingBoardSnapshotRepository;
         }
 
-        protected override async Task Handle(MatchUpCompleted cmd, CancellationToken cancellationToken)
+        public async Task HandleAsync(MatchUpCompleted evt)
         {
-            var ratingBoardSnapshot = await _ratingBoardSnapshotRepository.Get(cmd.RatingBoardId);
+            var ratingBoardSnapshot = await _ratingBoardSnapshotRepository.Get(evt.RatingBoardId);
 
             var ratingBoardModel = RatingBoardModel.For(ratingBoardSnapshot);
 
-            ratingBoardModel.Apply(cmd);
+            ratingBoardModel.Apply(evt);
 
             var updatedSnapshot = ratingBoardModel.ToSnapshot();
 

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using MediatR;
 
 namespace MultipleRanker.Contracts.Messages
 {
-    public class RatingsGenerated : IRequest
+    public class RatingsGenerated
     {
         public Guid RatingBoardId { get; set; }
 

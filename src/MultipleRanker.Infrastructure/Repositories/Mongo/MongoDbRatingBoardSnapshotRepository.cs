@@ -45,8 +45,6 @@ namespace MultipleRanker.Infrastructure.Repositories
         {
             var ratingBoardSnapshotEntity = ratingBoardSnapshot.ToRatingBoardEntity();
 
-            //_ratingCollection.InsertOne(ratingBoardSnapshot.ToRatingBoardEntity());
-
             await _ratingCollection.ReplaceOneAsync(
                 x => x.Id == ratingBoardSnapshot.Id.ToString(),
                 ratingBoardSnapshot.ToRatingBoardEntity(),

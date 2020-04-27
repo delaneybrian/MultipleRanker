@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Autofac;
 using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Infrastructure.Messaging;
 using MultipleRanker.Interfaces;
+using Module = Autofac.Module;
 
 namespace MultipleRanker.Host
 {
@@ -10,6 +12,8 @@ namespace MultipleRanker.Host
     {
         protected override void Load(ContainerBuilder builder)
         {
+            var applicationAssembly = Assembly.Load("MultipleRanker.Application");
+
             builder
                 .RegisterType<RabbitMQMessagePublisher>()
                 .As<IMessagePublisher>()
@@ -30,8 +34,13 @@ namespace MultipleRanker.Host
                 .SingleInstance();
 
             builder
-                .RegisterType<MediatRDispatcher>()
+                .RegisterType<MessageDispatcher>()
                 .As<IMessageDispatcher>();
+            
+            builder
+                .RegisterAssemblyTypes(applicationAssembly)
+                .Where(t => typeof(IHandler).IsAssignableFrom(t))
+                .As<IHandler>();
 
             builder
                 .RegisterType<SystemJsonSerializer>()

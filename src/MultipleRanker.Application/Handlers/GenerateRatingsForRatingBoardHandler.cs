@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
 using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Domain;
 using MultipleRanker.Domain.Raters;
 using MultipleRanker.Interfaces;
 
-namespace MultipleRanker.Application.MessageHandlers
+namespace MultipleRanker.Application.CommandHandlers
 {
-    public class GenerateRatingsForRatingBoardHandler : AsyncRequestHandler<GenerateRatingsForRatingBoard>
+    public class GenerateRatingsForRatingBoardHandler : IHandler<GenerateRatingsForRatingBoard>
     {
         private readonly IEnumerable<IRater> _raters;
         private readonly IRatingBoardSnapshotRepository _ratingBoardSnapshotRepository;
@@ -26,15 +24,15 @@ namespace MultipleRanker.Application.MessageHandlers
             _messagePublisher = messagePublisher;
         }
 
-        protected override async Task Handle(GenerateRatingsForRatingBoard cmd, CancellationToken cancellationToken)
+        public async Task HandleAsync(GenerateRatingsForRatingBoard evt)
         {
-            var ratingBoardSnapshot = await _ratingBoardSnapshotRepository.Get(cmd.RatingBoardId);
+            var ratingBoardSnapshot = await _ratingBoardSnapshotRepository.Get(evt.RatingBoardId);
 
             var ratingBoardModel = RatingBoardModel.For(ratingBoardSnapshot);
 
-            ratingBoardModel.Apply(cmd);
+            ratingBoardModel.Apply(evt);
 
-            var rater = _raters.Single(r => r.IsFor(cmd.RatingType.ToRankerType()));
+            var rater = _raters.Single(r => r.IsFor(evt.RatingType.ToRankerType()));
 
             var ratingsResults = rater.Rate(ratingBoardModel);
 
@@ -42,8 +40,8 @@ namespace MultipleRanker.Application.MessageHandlers
             {
                 RatingId = Guid.NewGuid(),
                 CalculatedAtUtc = DateTime.UtcNow,
-                RatingBoardId = cmd.RatingBoardId,
-                RatingType = cmd.RatingType,
+                RatingBoardId = evt.RatingBoardId,
+                RatingType = evt.RatingType,
                 ParticipantRatings = ratingsResults.ToList()
             };
 

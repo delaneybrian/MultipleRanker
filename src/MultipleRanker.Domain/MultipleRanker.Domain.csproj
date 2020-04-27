@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="8.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MultipleRanker.Contracts\MultipleRanker.Contracts.csproj" />
     <ProjectReference Include="..\MultipleRanker.Definitions\MultipleRanker.Definitions.csproj" />
   </ItemGroup>

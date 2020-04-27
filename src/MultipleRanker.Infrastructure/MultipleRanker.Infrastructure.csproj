@@ -6,9 +6,10 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
-    <PackageReference Include="MediatR" Version="8.0.1" />
     <PackageReference Include="MongoDB.Bson" Version="2.10.3" />
     <PackageReference Include="MongoDB.Driver" Version="2.10.3" />
+    <PackageReference Include="MultipleRanker.Messaging.Contracts" Version="1.1.0" />
+    <PackageReference Include="MultipleRanker.Messaging.Extensions" Version="1.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
     <PackageReference Include="System.Text.Json" Version="4.7.1" />
   </ItemGroup>

@@ -6,7 +6,7 @@ using MultipleRanker.Definitions.Snapshots;
 
 namespace MultipleRanker.Domain
 {
-    public class RatingBoardModel : AggregateBase
+    public class RatingBoardModel
     {
         public Guid Id { get; private set; }
         public List<ParticipantRatingModel> ParticipantRatingModels { get; private set; } = new List<ParticipantRatingModel>();
@@ -37,27 +37,27 @@ namespace MultipleRanker.Domain
             return new RatingBoardModel(snapshot);
         }
 
-        public void Apply(CreateRatingBoard cmd)
+        public void Apply(CreateRatingBoard evt)
         {
-            Id = cmd.Id;
+            Id = evt.Id;
         }
 
-        public void Apply(GenerateRatingsForRatingBoard cmd)
+        public void Apply(GenerateRatingsForRatingBoard evt)
         {
             //todo remove dependency on DateTime here :-(
             _lastRatingCalculatedAt = DateTime.UtcNow;
             _numberOfRatingsPerformed++;
         }
 
-        public void Apply(MatchUpCompleted cmd)
+        public void Apply(MatchUpCompleted evt)
         {
             _matchUpsCompleted++;
 
-            foreach (var matchUpParticipantScore in cmd.ParticipantScores)
+            foreach (var matchUpParticipantScore in evt.ParticipantScores)
             {
                 var participantRankingModel = ParticipantRatingModels.Single(x => x.Id == matchUpParticipantScore.ParticipantId);
 
-                foreach (var opponentMatchUpParticipantScore in cmd.ParticipantScores
+                foreach (var opponentMatchUpParticipantScore in evt.ParticipantScores
                     .Where(x => x.ParticipantId != matchUpParticipantScore.ParticipantId))
                 {
                     participantRankingModel.AddResultVersus(
@@ -68,9 +68,9 @@ namespace MultipleRanker.Domain
             }
         }
 
-        public void Apply(AddParticipantToRatingBoard cmd)
+        public void Apply(AddParticipantToRatingBoard evt)
         {
-            var participantRankingModel = new ParticipantRatingModel(cmd.ParticipantId, cmd.ParticipantName, _maxParticipantIndex);
+            var participantRankingModel = new ParticipantRatingModel(evt.ParticipantId, evt.ParticipantName, _maxParticipantIndex);
 
             _maxParticipantIndex++;
 

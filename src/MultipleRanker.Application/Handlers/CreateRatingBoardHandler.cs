@@ -1,13 +1,11 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using MediatR;
+﻿using System.Threading.Tasks;
 using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Domain;
 using MultipleRanker.Interfaces;
 
-namespace MultipleRanker.Application.MessageHandlers
+namespace MultipleRanker.Application.CommandHandlers
 {
-    public class CreateRatingBoardHandler : AsyncRequestHandler<CreateRatingBoard>
+    public class CreateRatingBoardHandler : IHandler<CreateRatingBoard>
     {
         private readonly IRatingBoardSnapshotRepository _ratingBoardSnapshotRepository;
 
@@ -16,11 +14,11 @@ namespace MultipleRanker.Application.MessageHandlers
             _ratingBoardSnapshotRepository = ratingBoardSnapshotRepository;
         }
 
-        protected override async Task Handle(CreateRatingBoard command, CancellationToken cancellationToken)
+        public async Task HandleAsync(CreateRatingBoard evt)
         {
             var model = new RatingBoardModel();
 
-            model.Apply(command);
+            model.Apply(evt);
 
             var snapshot = model.ToSnapshot();
 
