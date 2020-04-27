@@ -18,7 +18,7 @@ steps:
   inputs:
     command: 'restore'
     projects: '**/MultipleRanker.Host.csproj'
-    feedsToUse: 'select'
+    feedsToUse: config
 
 - task: DotNetCoreCLI@2
   inputs:
