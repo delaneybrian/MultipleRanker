@@ -18,7 +18,8 @@ steps:
   inputs:
     command: 'restore'
     projects: '**/MultipleRanker.Host.csproj'
-    feedsToUse: 'select'
+    feedsToUse: config
+    nugetConfigPath: 'Nuget.Config'
 
 - task: DotNetCoreCLI@2
   inputs:
