@@ -28,7 +28,7 @@ namespace MultipleRanker.Infrastructure.Repositories
             try
             {
                 var ratingBoards = await _ratingCollection
-                    .FindAsync(x => x.Id == ratingBoardId);
+                    .FindAsync(x => x.Id == ratingBoardId.ToString());
 
                 return ratingBoards
                     .Single()
@@ -43,10 +43,14 @@ namespace MultipleRanker.Infrastructure.Repositories
 
         public async Task Set(RatingBoardSnapshot ratingBoardSnapshot)
         {
+            var ratingBoardSnapshotEntity = ratingBoardSnapshot.ToRatingBoardEntity();
+
+            //_ratingCollection.InsertOne(ratingBoardSnapshot.ToRatingBoardEntity());
+
             await _ratingCollection.ReplaceOneAsync(
-                x => x.Id == ratingBoardSnapshot.Id,
-                ratingBoardSnapshot.ToRatingBoardEntity(), 
-                new ReplaceOptions {IsUpsert = true});
+                x => x.Id == ratingBoardSnapshot.Id.ToString(),
+                ratingBoardSnapshot.ToRatingBoardEntity(),
+                new ReplaceOptions { IsUpsert = true });
         }
     }
 }

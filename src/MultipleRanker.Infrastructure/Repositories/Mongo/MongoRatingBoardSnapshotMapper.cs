@@ -19,13 +19,13 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo
 
                 cfg.CreateMap<RatingBoardParticipantSnapshot, RatingBoardParticipantSnapshotEntity>()
                     .ForMember(x => x.TotalLosesByOpponentId, opt
-                        => opt.MapFrom(x => x.TotalLosesByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key, Value = y.Value })))
+                        => opt.MapFrom(x => x.TotalLosesByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key.ToString(), Value = y.Value })))
                     .ForMember(x => x.TotalScoreByOpponentId, opt
-                        => opt.MapFrom(x => x.TotalScoreByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key, Value = y.Value })))
+                        => opt.MapFrom(x => x.TotalScoreByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key.ToString(), Value = y.Value })))
                     .ForMember(x => x.TotalScoreConcededByOpponentId, opt
-                        => opt.MapFrom(x => x.TotalScoreConcededByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key, Value = y.Value })))
+                        => opt.MapFrom(x => x.TotalScoreConcededByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key.ToString(), Value = y.Value })))
                     .ForMember(x => x.TotalWinsByOpponentId, opt
-                        => opt.MapFrom(x => x.TotalWinsByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key, Value = y.Value })));
+                        => opt.MapFrom(x => x.TotalWinsByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key.ToString(), Value = y.Value })));
 
                 cfg.CreateMap<RatingBoardParticipantSnapshotEntity, RatingBoardParticipantSnapshot>()
                     .ForMember(x => x.TotalLosesByOpponentId, opt

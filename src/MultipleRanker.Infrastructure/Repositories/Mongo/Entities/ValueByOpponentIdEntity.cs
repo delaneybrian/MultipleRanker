@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 {
@@ -7,7 +6,7 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
     internal class ValueByOpponentIdEntity
     {
         [DataMember]
-        public Guid OpponentId { get; set; }
+        public string OpponentId { get; set; }
 
         [DataMember]
         public long Value { get; set; }

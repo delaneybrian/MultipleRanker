@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -10,7 +9,7 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
     {
         [BsonId]
         [DataMember]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         [DataMember]
         public string Name { get; set; }
