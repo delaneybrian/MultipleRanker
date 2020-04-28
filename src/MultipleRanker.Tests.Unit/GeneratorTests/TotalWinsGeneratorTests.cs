@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace MultipleRanker.Tests.Unit.GeneratorTests
 {
     [TestFixture]
-    public class TotalScoreGeneratorTests
+    public class TotalWinsGeneratorTests
     {
         public TestContext _context;
 
@@ -40,7 +40,7 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
             private readonly HashSet<TempParticipant> _partitipcants
                 = new HashSet<TempParticipant>();
 
-            private TotalScoreGenerator _sut;
+            private TotalWinsGenerator _sut;
 
             private readonly Guid _ratingBoardId;
 
@@ -54,18 +54,18 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
             {
                 _ratingBoardModel = new RatingBoardModel();
 
-                _sut = new TotalScoreGenerator();
+                _sut = new TotalWinsGenerator();
 
                 _ratingBoardId = Guid.NewGuid();
             }
 
             public TestContext SetExpectedResults()
             {
-                _expectedResultsArray[0] = new [] { 0, 52, 24, 38, 45 };
-                _expectedResultsArray[1] = new [] { 7, 0, 16, 17, 7 };
-                _expectedResultsArray[2] = new [] { 21, 34, 0, 5, 30 };
-                _expectedResultsArray[3] = new [] { 7, 25, 7, 0, 52 };
-                _expectedResultsArray[4] = new [] { 0, 27, 3, 14, 0 };
+                _expectedResultsArray[0] = new[] { 0, 1, 1, 1, 1 };
+                _expectedResultsArray[1] = new[] { 0, 0, 0, 0, 0 };
+                _expectedResultsArray[2] = new[] { 0, 1, 0, 0, 1 };
+                _expectedResultsArray[3] = new[] { 0, 1, 1, 0, 1 };
+                _expectedResultsArray[4] = new[] { 0, 1, 0, 0, 0 };
 
                 return this;
             }
