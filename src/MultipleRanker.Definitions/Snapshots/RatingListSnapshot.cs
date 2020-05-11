@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using MultipleRanker.Contracts;
 
 namespace MultipleRanker.Definitions.Snapshots
 {
@@ -32,5 +31,9 @@ namespace MultipleRanker.Definitions.Snapshots
 
         [DataMember]
         public RatingAggregationType RatingAggregationType { get; set; }
+
+        [DataMember]
+        public ICollection<RatingListResultSnapshot> RatingListResults { get; set; }
+          = new List<RatingListResultSnapshot>();
     }
 }

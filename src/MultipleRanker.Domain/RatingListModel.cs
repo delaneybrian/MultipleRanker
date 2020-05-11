@@ -11,12 +11,16 @@ namespace MultipleRanker.Domain
     {
         public Guid Id { get; private set; }
         public List<ParticipantRatingModel> ParticipantRatingModels { get; private set; } = new List<ParticipantRatingModel>();
+
+        public List<ResultModel> AppliedResults { get; private set;  }
+
         private long _numberOfResults;
         private long _numberOfRatingsPerformed;
         private DateTime _lastRatingCalculatedAt;
         private int _maxParticipantIndex;
         private RatingType _ratingType;
         private RatingAggregationType _ratingAggregationType;
+
         public RatingListModel()
         {
             
@@ -34,6 +38,8 @@ namespace MultipleRanker.Domain
             _maxParticipantIndex = snapshot.MaxParticipantIndex;
             _ratingType = snapshot.RatingType;
             _ratingAggregationType = snapshot.RatingAggregationType;
+            AppliedResults = snapshot.RatingListResults
+                .Select(x => )
         }
 
         public static RatingListModel For(RatingListSnapshot snapshot)
@@ -44,6 +50,9 @@ namespace MultipleRanker.Domain
         public void Apply(RatingListCreated evt)
         {
             Id = evt.RatingListId;
+
+            _ratingType = evt.RatingType.ToRatingType();
+            _ratingAggregationType = evt.RatingAggregation.ToRatingAggregationType();
         }
 
         public void Apply(GenerateRatings evt)

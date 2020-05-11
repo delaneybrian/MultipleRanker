@@ -17,6 +17,10 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo
 
                 cfg.CreateMap<RatingListSnapshotEntity, RatingListSnapshot>();
 
+                cfg.CreateMap<RatingListResultSnapshotEntity, RatingListResultSnapshot>();
+
+                cfg.CreateMap<RatingListResultSnapshot, RatingListResultSnapshotEntity>();
+
                 cfg.CreateMap<RatingListParticipantSnapshot, RatingListParticipantSnapshotEntity>()
                     .ForMember(x => x.TotalLosesByOpponentId, opt
                         => opt.MapFrom(x => x.TotalLosesByOpponentId.Select(y => new ValueByOpponentIdEntity<int> { OpponentId = y.Key.ToString(), Value = y.Value })))

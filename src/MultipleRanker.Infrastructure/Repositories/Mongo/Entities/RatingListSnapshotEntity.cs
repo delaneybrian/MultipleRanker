@@ -34,5 +34,9 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 
         [DataMember]
         public RatingAggregationType RatingAggregationType { get; set; }
+
+        [DataMember]
+        public ICollection<RatingListResultSnapshotEntity> RatingListResults { get; set; }
+        = new List<RatingListResultSnapshotEntity>();
     }
 }
