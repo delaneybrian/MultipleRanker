@@ -27,19 +27,19 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
         public int TotalGamesPlayed { get; set; }
 
         [DataMember]
-        public ICollection<ValueByOpponentIdEntity> TotalScoreByOpponentId =
-            new List<ValueByOpponentIdEntity>();
+        public ICollection<ValueByOpponentIdEntity<double>> TotalScoreByOpponentId =
+            new List<ValueByOpponentIdEntity<double>>();
 
         [DataMember]
-        public ICollection<ValueByOpponentIdEntity> TotalWinsByOpponentId =
-            new List<ValueByOpponentIdEntity>();
+        public ICollection<ValueByOpponentIdEntity<int>> TotalWinsByOpponentId =
+            new List<ValueByOpponentIdEntity<int>>();
 
         [DataMember]
-        public ICollection<ValueByOpponentIdEntity> TotalScoreConcededByOpponentId =
-            new List<ValueByOpponentIdEntity>();
+        public ICollection<ValueByOpponentIdEntity<double>> TotalScoreConcededByOpponentId =
+            new List<ValueByOpponentIdEntity<double>>();
 
         [DataMember]
-        public ICollection<ValueByOpponentIdEntity> TotalLosesByOpponentId =
-            new List<ValueByOpponentIdEntity>();
+        public ICollection<ValueByOpponentIdEntity<int>> TotalLosesByOpponentId =
+            new List<ValueByOpponentIdEntity<int>>();
     }
 }

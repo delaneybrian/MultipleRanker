@@ -33,7 +33,7 @@ namespace MultipleRanker.Application.CommandHandlers
 
             ratingListModel.Apply(evt);
 
-            var rater = _raters.Single(r => r.IsFor(evt.RatingType.ToRankerType()));
+            var rater = _raters.Single(r => r.IsFor(ratingListSnapshot.Type));
 
             var ratingsResults = rater.Rate(ratingListModel);
 
@@ -42,7 +42,6 @@ namespace MultipleRanker.Application.CommandHandlers
                 RatingId = Guid.NewGuid(),
                 CalculatedAtUtc = DateTime.UtcNow,
                 RatingListId = evt.RatingListId,
-                RatingType = evt.RatingType,
                 ParticipantRatings = ratingsResults.ToList()
             };
 

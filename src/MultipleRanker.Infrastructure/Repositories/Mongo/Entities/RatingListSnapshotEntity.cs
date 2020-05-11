@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
+using MultipleRanker.Definitions;
 
 namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 {
@@ -27,5 +28,11 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 
         [DataMember]
         public int MaxParticipantIndex { get; set; }
+
+        [DataMember]
+        public RatingType RatingType { get; set; }
+
+        [DataMember]
+        public RatingAggregationType RatingAggregationType { get; set; }
     }
 }

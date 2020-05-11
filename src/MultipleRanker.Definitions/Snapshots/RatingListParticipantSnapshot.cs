@@ -10,32 +10,30 @@ namespace MultipleRanker.Definitions.Snapshots
         [DataMember]
         public Guid Id { get; set; }
 
-        [DataMember]
-        public string Name { get; set; }
 
         [DataMember]
         public int Index { get; set; }
 
         [DataMember]
-        public long TotalScoreFor { get; set; }
+        public double TotalScoreFor { get; set; }
 
         [DataMember]
-        public long TotalScoreAgainst { get; set; }
+        public double TotalScoreAgainst { get; set; }
 
         [DataMember]
         public int TotalGamesPlayed { get; set; }
 
         [DataMember]
-        public IDictionary<Guid, int> TotalScoreByOpponentId =
-            new Dictionary<Guid, int>();
+        public IDictionary<Guid, double> TotalScoreByOpponentId =
+            new Dictionary<Guid, double>();
 
         [DataMember]
         public IDictionary<Guid, int> TotalWinsByOpponentId =
             new Dictionary<Guid, int>();
 
         [DataMember]
-        public IDictionary<Guid, int> TotalScoreConcededByOpponentId =
-            new Dictionary<Guid, int>();
+        public IDictionary<Guid, double> TotalScoreConcededByOpponentId =
+            new Dictionary<Guid, double>();
 
         [DataMember]
         public IDictionary<Guid, int> TotalLosesByOpponentId =

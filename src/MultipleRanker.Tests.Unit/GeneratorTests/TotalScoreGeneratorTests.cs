@@ -7,7 +7,10 @@ using MultipleRanker.Contracts;
 using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Domain;
 using MultipleRanker.Domain.Raters.Generators;
+using MultipleRanker.RankerApi.Contracts;
+using MultipleRanker.RankerApi.Contracts.Events;
 using NUnit.Framework;
+using RatingType = MultipleRanker.RankerApi.Contracts.RatingType;
 
 namespace MultipleRanker.Tests.Unit.GeneratorTests
 {
@@ -21,8 +24,8 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
             _context = new TestContext()
                 .LoadFixtures()
                 .LoadTeams()
-                .CreateRankingBoard()
-                .AddTeams()
+                .CreateRatingList()
+                .AddParticipants()
                 .AddGames();
 
         [Test]
@@ -37,14 +40,14 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
             private readonly List<TempMatchUp> _tempMatchUps
                 = new List<TempMatchUp>();
 
-            private readonly HashSet<TempParticipant> _partitipcants
+            private readonly HashSet<TempParticipant> _participants
                 = new HashSet<TempParticipant>();
 
             private TotalScoreGenerator _sut;
 
-            private readonly Guid _ratingBoardId;
+            private readonly Guid _ratingListId;
 
-            private RatingListModel _ratingBoardModel;
+            private RatingListModel _ratingListModel;
 
             private Matrix<double> _totalScoreMatrix;
 
@@ -52,11 +55,11 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
 
             public TestContext()
             {
-                _ratingBoardModel = new RatingListModel();
+                _ratingListModel = new RatingListModel();
 
                 _sut = new TotalScoreGenerator();
 
-                _ratingBoardId = Guid.NewGuid();
+                _ratingListId = Guid.NewGuid();
             }
 
             public TestContext SetExpectedResults()
@@ -72,7 +75,7 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
 
             public TestContext GenerateTotalScoreMatrix()
             {
-                _totalScoreMatrix = _sut.Generate(_ratingBoardModel);
+                _totalScoreMatrix = _sut.Generate(_ratingListModel);
 
                 return this;
             }
@@ -95,18 +98,17 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
                 return this;
             }
 
-            public TestContext AddTeams()
+            public TestContext AddParticipants()
             {
-                foreach (var participant in _partitipcants)
+                foreach (var participant in _participants)
                 {
-                    var addParticipantToRatingBoard = new AddParticipantToRatingBoard
+                    var participantAddedToRatingList = new ParticipantAddedToRatingList
                     {
                         ParticipantId = participant.Id,
-                        ParticipantName = participant.Name,
-                        RankingBoardId = _ratingBoardId
+                        RatingListId = _ratingListId
                     };
 
-                    _ratingBoardModel.Apply(addParticipantToRatingBoard);
+                    _ratingListModel.Apply(participantAddedToRatingList);
                 }
 
                 return this;
@@ -116,39 +118,42 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
             {
                 foreach (var matchUp in _tempMatchUps)
                 {
-                    var matchUpCompletedCommand = new MatchUpCompleted
+                    var resultAdded = new ResultAdded
                     {
-                        RatingBoardId = _ratingBoardId,
-                        ParticipantScores = new List<MatchUpParticipantScore>
+                        RatingListId = _ratingListId,
+                        ParticipantResults = new List<ParticipantResult>
                         {
-                            new MatchUpParticipantScore
+                            new ParticipantResult
                             {
                                 ParticipantId = matchUp.HomeParticipantId,
-                                PointsScored = matchUp.HomeParticipantScore
+                                Score = matchUp.HomeParticipantScore
                             },
-                            new MatchUpParticipantScore
+                            new ParticipantResult
                             {
                                 ParticipantId = matchUp.AwayParticipantId,
-                                PointsScored = matchUp.AwayParticipantScore
+                                Score = matchUp.AwayParticipantScore
                             }
                         }
                     };
 
-                    _ratingBoardModel.Apply(matchUpCompletedCommand);
+                    _ratingListModel.Apply(resultAdded);
                 }
 
                 return this;
             }
 
-            public TestContext CreateRankingBoard()
+            public TestContext CreateRatingList()
             {
-                var createRankingBoard = new CreateRatingBoard
+                var ratingListCreated = new RatingListCreated
                 {
-                    Id = _ratingBoardId,
-                    Name = "Test Rating Board"
+                    RatingListId = _ratingListId,
+                    RatingBoardId = Guid.NewGuid(),
+                    CreatedOnUtc = DateTime.UtcNow,
+                    RatingAggregation = RatingAggregationType.TotalScoreFor,
+                    RatingType = RatingType.OffensiveDefensive
                 };
 
-                _ratingBoardModel.Apply(createRankingBoard);
+                _ratingListModel.Apply(ratingListCreated);
 
                 return this;
             }
@@ -200,7 +205,7 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
 
                 foreach (var participantId in allParticipantIds)
                 {
-                    _partitipcants.Add(participantId);
+                    _participants.Add(participantId);
                 }
 
                 return this;

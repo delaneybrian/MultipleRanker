@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Definitions.Snapshots;
+using MultipleRanker.Definitions;
+using MultipleRanker.RankerApi.Contracts.Events;
 
 namespace MultipleRanker.Domain
 {
@@ -10,11 +11,12 @@ namespace MultipleRanker.Domain
     {
         public Guid Id { get; private set; }
         public List<ParticipantRatingModel> ParticipantRatingModels { get; private set; } = new List<ParticipantRatingModel>();
-        private long _matchUpsCompleted;
+        private long _numberOfResults;
         private long _numberOfRatingsPerformed;
         private DateTime _lastRatingCalculatedAt;
         private int _maxParticipantIndex;
-
+        private RatingType _ratingType;
+        private RatingAggregationType _ratingAggregationType;
         public RatingListModel()
         {
             
@@ -26,10 +28,12 @@ namespace MultipleRanker.Domain
             ParticipantRatingModels = snapshot.RatingListParticipants
                 .Select(participantSnapshot => ParticipantRatingModel.For(participantSnapshot))
                 .ToList();
-            _matchUpsCompleted = snapshot.MatchUpsCompleted;
+            _numberOfResults = snapshot.NumberOfResults;
             _lastRatingCalculatedAt = snapshot.LastRatingCalculatedAt;
             _numberOfRatingsPerformed = snapshot.NumberOfRatingsPerformed;
             _maxParticipantIndex = snapshot.MaxParticipantIndex;
+            _ratingType = snapshot.RatingType;
+            _ratingAggregationType = snapshot.RatingAggregationType;
         }
 
         public static RatingListModel For(RatingListSnapshot snapshot)
@@ -37,44 +41,44 @@ namespace MultipleRanker.Domain
             return new RatingListModel(snapshot);
         }
 
-        public void Apply(CreateRatingBoard evt)
+        public void Apply(RatingListCreated evt)
         {
-            Id = evt.Id;
+            Id = evt.RatingListId;
         }
 
-        public void Apply(GenerateRatingsForRatingBoard evt)
+        public void Apply(GenerateRatings evt)
         {
             //todo remove dependency on DateTime here :-(
             _lastRatingCalculatedAt = DateTime.UtcNow;
             _numberOfRatingsPerformed++;
         }
 
-        public void Apply(MatchUpCompleted evt)
+        public void Apply(ResultAdded evt)
         {
-            _matchUpsCompleted++;
+            _numberOfResults++;
 
-            foreach (var matchUpParticipantScore in evt.ParticipantScores)
+            foreach (var participantResult in evt.ParticipantResults)
             {
-                var participantRankingModel = ParticipantRatingModels.Single(x => x.Id == matchUpParticipantScore.ParticipantId);
+                var participantRatingModel = ParticipantRatingModels.Single(x => x.Id == participantResult.ParticipantId);
 
-                foreach (var opponentMatchUpParticipantScore in evt.ParticipantScores
-                    .Where(x => x.ParticipantId != matchUpParticipantScore.ParticipantId))
+                foreach (var opponentResult in evt.ParticipantResults
+                    .Where(x => x.ParticipantId != participantResult.ParticipantId))
                 {
-                    participantRankingModel.AddResultVersus(
-                        opponentMatchUpParticipantScore.ParticipantId, 
-                        matchUpParticipantScore.PointsScored, 
-                        opponentMatchUpParticipantScore.PointsScored);
+                    participantRatingModel.AddResultVersus(
+                        opponentResult.ParticipantId,
+                        participantResult.Score,
+                        opponentResult.Score);
                 }
             }
         }
 
-        public void Apply(AddParticipantToRatingBoard evt)
+        public void Apply(ParticipantAddedToRatingList evt)
         {
-            var participantRankingModel = new ParticipantRatingModel(evt.ParticipantId, evt.ParticipantName, _maxParticipantIndex);
+            var participantRatingModel = new ParticipantRatingModel(evt.ParticipantId, _maxParticipantIndex);
 
             _maxParticipantIndex++;
 
-            ParticipantRatingModels.Add(participantRankingModel);
+            ParticipantRatingModels.Add(participantRatingModel);
         }
 
         public RatingListSnapshot ToSnapshot()
@@ -85,10 +89,12 @@ namespace MultipleRanker.Domain
                 RatingListParticipants = ParticipantRatingModels
                     .Select(rankingModel => rankingModel.ToSnapshot())
                     .ToList(),
-                MatchUpsCompleted = _matchUpsCompleted,
+                NumberOfResults = _numberOfResults,
                 NumberOfRatingsPerformed = _numberOfRatingsPerformed,
                 LastRatingCalculatedAt = _lastRatingCalculatedAt,
-                MaxParticipantIndex = _maxParticipantIndex
+                MaxParticipantIndex = _maxParticipantIndex,
+                RatingType = _ratingType,
+                RatingAggregationType = _ratingAggregationType
             };
         }
     }

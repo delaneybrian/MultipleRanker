@@ -6,7 +6,11 @@ using MultipleRanker.Contracts;
 using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Domain;
 using MultipleRanker.Domain.Raters;
+using MultipleRanker.RankerApi.Contracts;
+using MultipleRanker.RankerApi.Contracts.Events;
 using NUnit.Framework;
+using ParticipantRating = MultipleRanker.Contracts.ParticipantRating;
+using RatingType = MultipleRanker.RankerApi.Contracts.RatingType;
 
 namespace MultipleRanker.Tests.Unit
 {
@@ -20,8 +24,8 @@ namespace MultipleRanker.Tests.Unit
             _context = new TestContext()
                 .LoadFixtures()
                 .LoadTeams()
-                .CreateRankingBoard()
-                .AddTeams()
+                .CreateRatingList()
+                .AddParticipants()
                 .AddGames();
 
         [Test]
@@ -40,54 +44,56 @@ namespace MultipleRanker.Tests.Unit
 
             private OffensiveDefensiveRaters _sut;
 
-            private readonly Guid _ratingBoardId;
+            private readonly Guid _ratingListId;
 
-            private RatingListModel _ratingBoardModel;
+            private RatingListModel _ratingListModel;
 
             private IEnumerable<ParticipantRating> _ratingResults;
 
             public TestContext()
             {
-                _ratingBoardModel = new RatingListModel();
+                _ratingListModel = new RatingListModel();
 
                 _sut = new OffensiveDefensiveRaters();
 
-                _ratingBoardId = Guid.NewGuid();
+                _ratingListId = Guid.NewGuid();
             }
 
             public TestContext Rate()
             {
                 _ratingResults = _sut
-                    .Rate(_ratingBoardModel);
+                    .Rate(_ratingListModel);
 
                 return this;
             }
 
-            public TestContext CreateRankingBoard()
+            public TestContext CreateRatingList()
             {
-                var createRankingBoardCommand = new CreateRatingBoard
+                var ratingListCreated = new RatingListCreated
                 {
-                    Id = _ratingBoardId,
-                    Name = "Test Rating Board"
+                    RatingListId = _ratingListId,
+                    RatingBoardId = Guid.NewGuid(),
+                    RatingAggregation = RatingAggregationType.TotalWins,
+                    RatingType = RatingType.OffensiveDefensive,
+                    CreatedOnUtc = DateTime.UtcNow
                 };
 
-                _ratingBoardModel.Apply(createRankingBoardCommand);
+                _ratingListModel.Apply(ratingListCreated);
 
                 return this;
             }
 
-            public TestContext AddTeams()
+            public TestContext AddParticipants()
             {
                 foreach (var participant in _partitipcants)
                 {
-                    var addParticipantToRatingBoard = new AddParticipantToRatingBoard
+                    var addParticipantToRatingBoard = new ParticipantAddedToRatingList
                     {
                         ParticipantId = participant.Id,
-                        ParticipantName = participant.Name,
-                        RankingBoardId = _ratingBoardId
+                        RatingListId = _ratingListId
                     };
 
-                    _ratingBoardModel.Apply(addParticipantToRatingBoard);
+                    _ratingListModel.Apply(addParticipantToRatingBoard);
                 }
 
                 return this;
@@ -97,25 +103,25 @@ namespace MultipleRanker.Tests.Unit
             {
                 foreach (var matchUp in _tempMatchUps)
                 {
-                    var matchUpCompletedCommand = new MatchUpCompleted
+                    var resultAdded = new ResultAdded
                     {
-                        RatingBoardId = _ratingBoardId,
-                        ParticipantScores = new List<MatchUpParticipantScore>
+                        RatingListId = _ratingListId,
+                        ParticipantResults = new List<ParticipantResult>
                         {
-                            new MatchUpParticipantScore
+                            new ParticipantResult
                             {
                                 ParticipantId = matchUp.HomeParticipantId,
-                                PointsScored = matchUp.HomeParticipantScore
+                                Score = matchUp.HomeParticipantScore
                             },
-                            new MatchUpParticipantScore
+                            new ParticipantResult
                             {
                                 ParticipantId = matchUp.AwayParticipantId,
-                                PointsScored = matchUp.AwayParticipantScore
+                                Score = matchUp.AwayParticipantScore
                             }
                         }
                     };
 
-                    _ratingBoardModel.Apply(matchUpCompletedCommand);
+                    _ratingListModel.Apply(resultAdded);
                 }
 
                 return this;

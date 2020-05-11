@@ -3,12 +3,12 @@
 namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 {
     [DataContract]
-    internal class ValueByOpponentIdEntity
+    internal class ValueByOpponentIdEntity<T>
     {
         [DataMember]
         public string OpponentId { get; set; }
 
         [DataMember]
-        public long Value { get; set; }
+        public T Value { get; set; }
     }
 }

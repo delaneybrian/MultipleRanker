@@ -8,7 +8,7 @@ namespace MultipleRanker.Domain.Raters.Raters
     {
         public bool IsFor(RaterType raterType)
         {
-            return raterType == RatingType.Elo ;
+            return raterType == RaterType.Elo;
         }
 
         public IEnumerable<ParticipantRating> Rate(RatingListModel ratingBoardModel)

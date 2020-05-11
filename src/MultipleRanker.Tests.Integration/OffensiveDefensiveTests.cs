@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text;
-using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Infrastructure.Messaging;
 using MultipleRanker.Interfaces;
 using MultipleRanker.Messaging.Contracts;
+using MultipleRanker.RankerApi.Contracts;
+using MultipleRanker.RankerApi.Contracts.Events;
 using NUnit.Framework;
 using RabbitMQ.Client;
 
@@ -20,7 +21,7 @@ namespace MultipleRanker.Tests.Integration
         [Test]
         public void TestPublish() =>
             _context
-                .PublishCreateRatingBoard();
+                .PublishRatingListCreated();
             
 
         public class TestContext
@@ -36,17 +37,20 @@ namespace MultipleRanker.Tests.Integration
                 _connection = factory.CreateConnection();
             }
 
-            public TestContext PublishCreateRatingBoard()
+            public TestContext PublishRatingListCreated()
             {
                 var correlationId = Guid.NewGuid();
 
-                var createRatingBoardMessage = new CreateRatingBoard
+                var ratingListCreated = new RatingListCreated
                 {
-                    Id = Guid.NewGuid(),
-                    Name = "Test Board"
+                    RatingBoardId = Guid.NewGuid(),
+                    RatingListId = Guid.NewGuid(),
+                    CreatedOnUtc = DateTime.UtcNow,
+                    RatingType = RatingType.OffensiveDefensive,
+                    RatingAggregation = RatingAggregationType.ScoreDifference
                 };
 
-                Publish(createRatingBoardMessage, correlationId);
+                Publish(ratingListCreated, correlationId);
 
                 return this;
             }

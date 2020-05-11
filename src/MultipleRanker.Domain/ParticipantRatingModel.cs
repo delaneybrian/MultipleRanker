@@ -8,26 +8,23 @@ namespace MultipleRanker.Domain
     {
         public Guid Id { get; private set; }
 
-        public string Name { get; private set; }
-
         public int Index { get; private set; }
 
-        public long TotalScoreFor { get; private set; }
-        public long TotalScoreAgainst { get; private set; }
+        public double TotalScoreFor { get; private set; }
+        public double TotalScoreAgainst { get; private set; }
         public int TotalGamesPlayed { get; private set; }
 
-        public IDictionary<Guid, int> TotalScoreByOpponentId { get; private set; } = new Dictionary<Guid, int>();
+        public IDictionary<Guid, double> TotalScoreByOpponentId { get; private set; } = new Dictionary<Guid, double>();
 
         public IDictionary<Guid, int> TotalWinsByOpponentId { get; private set; } = new Dictionary<Guid, int>();
 
-        public IDictionary<Guid, int> TotalScoreConcededByOpponentId { get; private set; } = new Dictionary<Guid, int>();
+        public IDictionary<Guid, double> TotalScoreConcededByOpponentId { get; private set; } = new Dictionary<Guid, double>();
 
         public IDictionary<Guid, int> TotalLosesByOpponentId { get; private set; } = new Dictionary<Guid, int>();
 
-        public ParticipantRatingModel(Guid id, string name, int index)
+        public ParticipantRatingModel(Guid id, int index)
         {
             Id = id;
-            Name = name;
             Index = index;
         }
 
@@ -36,7 +33,7 @@ namespace MultipleRanker.Domain
             return new ParticipantRatingModel(snapshot);
         }
 
-        public void AddResultVersus(Guid opponentId, int score, int opponentScore)
+        public void AddResultVersus(Guid opponentId, double score, double opponentScore)
         {
             TotalGamesPlayed += 1;
 
@@ -68,7 +65,6 @@ namespace MultipleRanker.Domain
             return new RatingListParticipantSnapshot
             {
                 Id = Id,
-                Name = Name,
                 Index = Index,
                 TotalGamesPlayed = TotalGamesPlayed,
                 TotalScoreFor = TotalScoreFor,
@@ -83,7 +79,6 @@ namespace MultipleRanker.Domain
         private ParticipantRatingModel(RatingListParticipantSnapshot snapshot)
         {
             Id = snapshot.Id;
-            Name = snapshot.Name;
             Index = snapshot.Index;
             TotalScoreFor = snapshot.TotalScoreFor;
             TotalScoreAgainst = snapshot.TotalScoreAgainst;
@@ -93,11 +88,11 @@ namespace MultipleRanker.Domain
             TotalWinsByOpponentId = snapshot.TotalWinsByOpponentId;
         }
 
-        private void AddOrUpdateDictionary(
-            IDictionary<Guid, int> toUpdate,
+        private void AddOrUpdateDictionary<T>(
+            IDictionary<Guid, T> toUpdate,
             Guid opponentId,
-            Func<int, int> updateFunc,
-            int addValue)
+            Func<T, T> updateFunc,
+            T addValue)
         {
             if (toUpdate.TryGetValue(opponentId, out var value))
             {

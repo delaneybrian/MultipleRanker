@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MultipleRanker.Contracts\MultipleRanker.Contracts.csproj" />
+    <ProjectReference Include="..\MultipleRanker.Definitions\MultipleRanker.Definitions.csproj" />
     <ProjectReference Include="..\MultipleRanker.Interfaces\MultipleRanker.Interfaces.csproj" />
   </ItemGroup>
 

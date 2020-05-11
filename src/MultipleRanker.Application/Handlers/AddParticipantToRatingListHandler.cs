@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Domain;
 using MultipleRanker.Interfaces;
+using MultipleRanker.RankerApi.Contracts.Events;
 
 namespace MultipleRanker.Application.CommandHandlers
 {
-    public class AddParticipantToRatingBoardHandler : IHandler<AddParticipantToRatingBoard>
+    public class AddParticipantToRatingListHandler : IHandler<ParticipantAddedToRatingList>
     {
         private readonly IListSnapshotRepository _ratingListSnapshotRepository;
 
-        public AddParticipantToRatingBoardHandler(IListSnapshotRepository ratingListSnapshotRepository)
+        public AddParticipantToRatingListHandler(IListSnapshotRepository ratingListSnapshotRepository)
         {
             _ratingListSnapshotRepository = ratingListSnapshotRepository;
         }
 
-        public async Task HandleAsync(AddParticipantToRatingBoard evt)
+        public async Task HandleAsync(ParticipantAddedToRatingList evt)
         {
             try
             {
-                var ratingListSnapshot = await _ratingListSnapshotRepository.Get(evt.RankingBoardId);
+                var ratingListSnapshot = await _ratingListSnapshotRepository.Get(evt.RatingListId);
 
                 var ratingListModel = RatingListModel.For(ratingListSnapshot);
 

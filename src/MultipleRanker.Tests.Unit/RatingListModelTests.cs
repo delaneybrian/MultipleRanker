@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MultipleRanker.Contracts;
-using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Domain;
 using NUnit.Framework;
 using MultipleRanker.Definitions.Snapshots;
+using MultipleRanker.RankerApi.Contracts;
+using MultipleRanker.RankerApi.Contracts.Events;
+using RatingType = MultipleRanker.RankerApi.Contracts.RatingType;
 
 namespace MultipleRanker.Tests.Integration
 {
     [TestFixture]
-    public class RankingBoardModelTests
+    public class RatingListModelTests
     {
         public TestContext _context;
 
@@ -20,8 +21,8 @@ namespace MultipleRanker.Tests.Integration
             _context = new TestContext()
                 .LoadFixtures()
                 .LoadTeams()
-                .CreateRatingBoard()
-                .AddTeams()
+                .CreateRatingList()
+                .AddParticipants()
                 .AddGames()
                 .ToSnapshot();
 
@@ -158,49 +159,51 @@ namespace MultipleRanker.Tests.Integration
 
             private RatingListModel _sut;
 
-            private readonly Guid _ratingBoardId;
+            private readonly Guid _ratingListId;
 
-            private RatingListSnapshot _ratingBoardSnapshot;
+            private RatingListSnapshot _ratingListSnapshot;
             
             public TestContext()
             {
                 _sut = new RatingListModel();
 
-                _ratingBoardId = Guid.NewGuid();
+                _ratingListId = Guid.NewGuid();
             }
 
             public TestContext ToSnapshot()
             {
-                _ratingBoardSnapshot = _sut.ToSnapshot();
+                _ratingListSnapshot = _sut.ToSnapshot();
 
                 return this;
             }
 
-            public TestContext CreateRatingBoard()
+            public TestContext CreateRatingList()
             {
-                var createRatingBoard = new CreateRatingBoard
+                var ratingListCreated = new RatingListCreated
                 {
-                    Id = _ratingBoardId,
-                    Name = "Test Ranking Board"
+                    RatingListId = _ratingListId,
+                    RatingBoardId = Guid.NewGuid(),
+                    RatingAggregation = RatingAggregationType.TotalScoreAgainst,
+                    RatingType = RatingType.OffensiveDefensive,
+                    CreatedOnUtc = DateTime.UtcNow
                 };
 
-                _sut.Apply(createRatingBoard);
+                _sut.Apply(ratingListCreated);
 
                 return this;
             }
 
-            public TestContext AddTeams()
+            public TestContext AddParticipants()
             {
                 foreach (var participantId in _participantIds)
                 {
-                    var addParticipantToRankingBoard = new AddParticipantToRatingBoard
+                    var participantAddedToRatingList = new ParticipantAddedToRatingList
                     {
                         ParticipantId = participantId,
-                        ParticipantName = "Test",
-                        RankingBoardId = _ratingBoardId
+                        RatingListId = _ratingListId
                     };
 
-                    _sut.Apply(addParticipantToRankingBoard);
+                    _sut.Apply(participantAddedToRatingList);
                 }
 
                 return this;
@@ -210,25 +213,26 @@ namespace MultipleRanker.Tests.Integration
             {
                 foreach (var matchUp in _tempMatchUps)
                 {
-                    var matchUpCompletedCommand = new MatchUpCompleted
+                    var resultAdded = new ResultAdded
                     {
-                        RatingBoardId = _ratingBoardId,
-                        ParticipantScores = new List<MatchUpParticipantScore>
+                        ResultId = Guid.NewGuid(),
+                        RatingListId = _ratingListId,
+                        ParticipantResults = new List<ParticipantResult>
                         {
-                            new MatchUpParticipantScore
+                            new ParticipantResult
                             {
                                 ParticipantId = matchUp.HomeParticipantId,
-                                PointsScored = matchUp.HomeParticipantScore
+                                Score = matchUp.HomeParticipantScore
                             },
-                            new MatchUpParticipantScore
+                            new ParticipantResult
                             {
                                 ParticipantId = matchUp.AwayParticipantId,
-                                PointsScored = matchUp.AwayParticipantScore
+                                Score = matchUp.AwayParticipantScore
                             }
                         }
                     };
 
-                    _sut.Apply(matchUpCompletedCommand);
+                    _sut.Apply(resultAdded);
                 }
 
                 return this;
@@ -285,10 +289,10 @@ namespace MultipleRanker.Tests.Integration
 
                 var opponentIdToCheck = Guid.Parse(opponentId);
 
-                var ratingBoardParticipant = _ratingBoardSnapshot.RatingBoardParticipants
+                var ratingListParticipant = _ratingListSnapshot.RatingListParticipants
                     .Single(p => p.Id == participantIdToCheck);
 
-                var actualLosses = ratingBoardParticipant.TotalLosesByOpponentId[opponentIdToCheck];
+                var actualLosses = ratingListParticipant.TotalLosesByOpponentId[opponentIdToCheck];
 
                 Assert.AreEqual(expectedLosses, actualLosses);
 
@@ -301,10 +305,10 @@ namespace MultipleRanker.Tests.Integration
 
                 var opponentIdToCheck = Guid.Parse(opponentId);
 
-                var ratingBoardParticipant = _ratingBoardSnapshot.RatingBoardParticipants
+                var ratingListParticipant = _ratingListSnapshot.RatingListParticipants
                     .Single(p => p.Id == participantIdToCheck);
 
-                var actualWins = ratingBoardParticipant.TotalWinsByOpponentId[opponentIdToCheck];
+                var actualWins = ratingListParticipant.TotalWinsByOpponentId[opponentIdToCheck];
 
                 Assert.AreEqual(expectedWins, actualWins);
 
@@ -317,10 +321,10 @@ namespace MultipleRanker.Tests.Integration
 
                 var opponentIdToCheck = Guid.Parse(opponentId);
 
-                var ratingBoardParticipant = _ratingBoardSnapshot.RatingBoardParticipants
+                var ratingListParticipant = _ratingListSnapshot.RatingListParticipants
                     .Single(p => p.Id == participantIdToCheck);
 
-                var actualScoreConceeded = ratingBoardParticipant.TotalScoreConcededByOpponentId[opponentIdToCheck];
+                var actualScoreConceeded = ratingListParticipant.TotalScoreConcededByOpponentId[opponentIdToCheck];
 
                 Assert.AreEqual(expectedConcededScore, actualScoreConceeded);
 
@@ -333,10 +337,10 @@ namespace MultipleRanker.Tests.Integration
 
                 var opponentIdToCheck = Guid.Parse(opponentId);
 
-                var ratingBoardParticipant = _ratingBoardSnapshot.RatingBoardParticipants
+                var ratingListParticipant = _ratingListSnapshot.RatingListParticipants
                     .Single(p => p.Id == participantIdToCheck);
 
-                var totalScored = ratingBoardParticipant.TotalScoreByOpponentId[opponentIdToCheck];
+                var totalScored = ratingListParticipant.TotalScoreByOpponentId[opponentIdToCheck];
 
                 Assert.AreEqual(expectedTotalScore, totalScored);
 
@@ -347,10 +351,10 @@ namespace MultipleRanker.Tests.Integration
             {
                 var participantIdToCheck = Guid.Parse(participantId);
 
-                var ratingBoardParticipant = _ratingBoardSnapshot.RatingBoardParticipants
+                var ratingListParticipant = _ratingListSnapshot.RatingListParticipants
                     .Single(p => p.Id == participantIdToCheck);
 
-                var totalGamesPlayed = ratingBoardParticipant.TotalGamesPlayed;
+                var totalGamesPlayed = ratingListParticipant.TotalGamesPlayed;
 
                 Assert.AreEqual(expectedGamesPlayed, totalGamesPlayed);
 
@@ -361,10 +365,10 @@ namespace MultipleRanker.Tests.Integration
             {
                 var participantIdToCheck = Guid.Parse(participantId);
 
-                var ratingBoardParticipant = _ratingBoardSnapshot.RatingBoardParticipants
+                var ratingListParticipant = _ratingListSnapshot.RatingListParticipants
                     .Single(p => p.Id == participantIdToCheck);
 
-                var totalScoreAgainst = ratingBoardParticipant.TotalScoreAgainst;
+                var totalScoreAgainst = ratingListParticipant.TotalScoreAgainst;
 
                 Assert.AreEqual(expectedScoreAgainst, totalScoreAgainst);
 
@@ -375,10 +379,10 @@ namespace MultipleRanker.Tests.Integration
             {
                 var participantIdToCheck = Guid.Parse(participantId);
 
-                var ratingBoardParticipant = _ratingBoardSnapshot.RatingBoardParticipants
+                var ratingListParticipant = _ratingListSnapshot.RatingListParticipants
                     .Single(p => p.Id == participantIdToCheck);
 
-                var totalScoreFor = ratingBoardParticipant.TotalScoreFor;
+                var totalScoreFor = ratingListParticipant.TotalScoreFor;
 
                 Assert.AreEqual(expectedScoreFor, totalScoreFor);
 
