@@ -9,7 +9,7 @@ using MultipleRanker.RankerApi.Contracts;
 using MultipleRanker.RankerApi.Contracts.Events;
 using RatingType = MultipleRanker.RankerApi.Contracts.RatingType;
 
-namespace MultipleRanker.Tests.Integration
+namespace MultipleRanker.Tests.Unit
 {
     [TestFixture]
     public class RatingListModelTests
