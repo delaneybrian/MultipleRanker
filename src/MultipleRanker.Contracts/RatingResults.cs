@@ -15,8 +15,5 @@ namespace MultipleRanker.Contracts
 
         [DataMember]
         public ICollection<ParticipantRating> ParticipantRatings { get; set; }
-
-        [DataMember]
-        public RatingType RatingType { get; set; }
     }
 }

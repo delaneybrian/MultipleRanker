@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using MultipleRanker.Contracts;
+using MultipleRanker.Definitions;
 
 namespace MultipleRanker.Domain.Raters.Raters
 {
     public class KeenersRater : IRater
     {
-        public bool IsFor(RaterType raterType)
+        public bool IsFor(RatingType ratingType)
         {
-            return raterType == RaterType.KeenerMethod;
+            return ratingType == RatingType.Keeners;
         }
 
         public IEnumerable<ParticipantRating> Rate(RatingListModel ratingListModel)

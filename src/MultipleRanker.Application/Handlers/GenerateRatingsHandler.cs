@@ -33,7 +33,7 @@ namespace MultipleRanker.Application.CommandHandlers
 
             ratingListModel.Apply(evt);
 
-            var rater = _raters.Single(r => r.IsFor(ratingListSnapshot.Type));
+            var rater = _raters.Single(r => r.IsFor(ratingListSnapshot.RatingType));
 
             var ratingsResults = rater.Rate(ratingListModel);
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using MultipleRanker.Contracts;
+using MultipleRanker.Definitions;
 
 namespace MultipleRanker.Domain.Raters
 {
@@ -18,9 +19,9 @@ namespace MultipleRanker.Domain.Raters
 
         private Matrix<double> _results;
 
-        public bool IsFor(RaterType raterType)
+        public bool IsFor(RatingType ratingType)
         {
-            return raterType == RaterType.OffensiveDefensive;
+            return ratingType == RatingType.OffensiveDefensive;
         }
 
         public IEnumerable<ParticipantRating> Rate(RatingListModel ratingListModel)

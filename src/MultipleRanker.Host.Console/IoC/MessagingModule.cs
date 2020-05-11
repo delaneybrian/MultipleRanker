@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
-using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Infrastructure.Messaging;
 using MultipleRanker.Interfaces;
+using MultipleRanker.RankerApi.Contracts.Events;
 using Module = Autofac.Module;
 
 namespace MultipleRanker.Host
@@ -26,10 +26,10 @@ namespace MultipleRanker.Host
                     "subscribedTo", 
                     new List<string>
                     {
-                        typeof(CreateRatingBoard).FullName,
-                        typeof(AddParticipantToRatingBoard).FullName,
-                        typeof(GenerateRatingsForRatingBoard).FullName,
-                        typeof(MatchUpCompleted).FullName
+                        typeof(ParticipantAddedToRatingList).FullName,
+                        typeof(GenerateRatings).FullName,
+                        typeof(RatingListCreated).FullName,
+                        typeof(ResultAdded).FullName
                     }.ToArray())
                 .SingleInstance();
 
