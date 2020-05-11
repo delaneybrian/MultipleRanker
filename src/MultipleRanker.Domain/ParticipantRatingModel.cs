@@ -17,8 +17,11 @@ namespace MultipleRanker.Domain
         public int TotalGamesPlayed { get; private set; }
 
         public IDictionary<Guid, int> TotalScoreByOpponentId { get; private set; } = new Dictionary<Guid, int>();
+
         public IDictionary<Guid, int> TotalWinsByOpponentId { get; private set; } = new Dictionary<Guid, int>();
+
         public IDictionary<Guid, int> TotalScoreConcededByOpponentId { get; private set; } = new Dictionary<Guid, int>();
+
         public IDictionary<Guid, int> TotalLosesByOpponentId { get; private set; } = new Dictionary<Guid, int>();
 
         public ParticipantRatingModel(Guid id, string name, int index)
@@ -28,7 +31,7 @@ namespace MultipleRanker.Domain
             Index = index;
         }
 
-        public static ParticipantRatingModel For(RatingBoardParticipantSnapshot snapshot)
+        public static ParticipantRatingModel For(RatingListParticipantSnapshot snapshot)
         {
             return new ParticipantRatingModel(snapshot);
         }
@@ -60,9 +63,9 @@ namespace MultipleRanker.Domain
             AddOrUpdateDictionary(TotalScoreConcededByOpponentId, opponentId, (x) => x += opponentScore, opponentScore);
         }
 
-        public RatingBoardParticipantSnapshot ToSnapshot()
+        public RatingListParticipantSnapshot ToSnapshot()
         {
-            return new RatingBoardParticipantSnapshot
+            return new RatingListParticipantSnapshot
             {
                 Id = Id,
                 Name = Name,
@@ -77,7 +80,7 @@ namespace MultipleRanker.Domain
             };
         }
 
-        private ParticipantRatingModel(RatingBoardParticipantSnapshot snapshot)
+        private ParticipantRatingModel(RatingListParticipantSnapshot snapshot)
         {
             Id = snapshot.Id;
             Name = snapshot.Name;

@@ -5,19 +5,19 @@ using MultipleRanker.Infrastructure.Repositories.Mongo.Entities;
 
 namespace MultipleRanker.Infrastructure.Repositories.Mongo
 {
-    internal static class MongoRatingBoardSnapshotMapper
+    internal static class MongoRatingListSnapshotMapper
     {
         internal static IMapper _mapper;
 
-        static MongoRatingBoardSnapshotMapper()
+        static MongoRatingListSnapshotMapper()
         {
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<RatingBoardSnapshot, RatingBoardSnapshotEntity>();
+                cfg.CreateMap<RatingListSnapshot, RatingListSnapshotEntity>();
 
-                cfg.CreateMap<RatingBoardSnapshotEntity, RatingBoardSnapshot>();
+                cfg.CreateMap<RatingListSnapshotEntity, RatingListSnapshot>();
 
-                cfg.CreateMap<RatingBoardParticipantSnapshot, RatingBoardParticipantSnapshotEntity>()
+                cfg.CreateMap<RatingListParticipantSnapshot, RatingListParticipantSnapshotEntity>()
                     .ForMember(x => x.TotalLosesByOpponentId, opt
                         => opt.MapFrom(x => x.TotalLosesByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key.ToString(), Value = y.Value })))
                     .ForMember(x => x.TotalScoreByOpponentId, opt
@@ -27,7 +27,7 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo
                     .ForMember(x => x.TotalWinsByOpponentId, opt
                         => opt.MapFrom(x => x.TotalWinsByOpponentId.Select(y => new ValueByOpponentIdEntity { OpponentId = y.Key.ToString(), Value = y.Value })));
 
-                cfg.CreateMap<RatingBoardParticipantSnapshotEntity, RatingBoardParticipantSnapshot>()
+                cfg.CreateMap<RatingListParticipantSnapshotEntity, RatingListParticipantSnapshot>()
                     .ForMember(x => x.TotalLosesByOpponentId, opt
                         => opt.MapFrom(x => x.TotalLosesByOpponentId.ToDictionary(k => k.OpponentId, v => v.Value)))
                     .ForMember(x => x.TotalScoreByOpponentId, opt
@@ -42,14 +42,14 @@ namespace MultipleRanker.Infrastructure.Repositories.Mongo
 
         }
 
-        internal static RatingBoardSnapshotEntity ToRatingBoardEntity(this RatingBoardSnapshot ratingBoardSnapshot)
+        internal static RatingListSnapshotEntity ToRatingListEntity(this RatingListSnapshot ratingListSnapshot)
         {
-            return _mapper.Map<RatingBoardSnapshotEntity>(ratingBoardSnapshot);
+            return _mapper.Map<RatingListSnapshotEntity>(ratingListSnapshot);
         }
 
-        internal static RatingBoardSnapshot ToRatingBoardSnapshot(this RatingBoardSnapshotEntity ratingBoardSnapshotEntity)
+        internal static RatingListSnapshot ToRatingListSnapshot(this RatingListSnapshotEntity ratingListSnapshotEntity)
         {
-            return _mapper.Map<RatingBoardSnapshot>(ratingBoardSnapshotEntity);
+            return _mapper.Map<RatingListSnapshot>(ratingListSnapshotEntity);
         }
     }
 }

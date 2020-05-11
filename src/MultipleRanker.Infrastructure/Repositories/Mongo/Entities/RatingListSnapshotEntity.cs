@@ -6,15 +6,15 @@ using MongoDB.Bson.Serialization.Attributes;
 namespace MultipleRanker.Infrastructure.Repositories.Mongo.Entities
 {
     [DataContract]
-    internal class RatingBoardSnapshotEntity
+    internal class RatingListSnapshotEntity
     {
         [BsonId]
         [DataMember]
         public string Id { get; set; }
 
         [DataMember]
-        public ICollection<RatingBoardParticipantSnapshotEntity> RatingBoardParticipants { get; set; }
-            = new List<RatingBoardParticipantSnapshotEntity>();
+        public ICollection<RatingListParticipantSnapshotEntity> RatingListParticipants { get; set; }
+            = new List<RatingListParticipantSnapshotEntity>();
 
         [DataMember]
         public long MatchUpsCompleted { get; set; }

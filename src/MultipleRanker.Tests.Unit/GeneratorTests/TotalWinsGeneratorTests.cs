@@ -44,7 +44,7 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
 
             private readonly Guid _ratingBoardId;
 
-            private RatingBoardModel _ratingBoardModel;
+            private RatingListModel _ratingBoardModel;
 
             private Matrix<double> _totalScoreMatrix;
 
@@ -52,7 +52,7 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
 
             public TestContext()
             {
-                _ratingBoardModel = new RatingBoardModel();
+                _ratingBoardModel = new RatingListModel();
 
                 _sut = new TotalWinsGenerator();
 
@@ -72,7 +72,8 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
 
             public TestContext GenerateTotalScoreMatrix()
             {
-                _totalScoreMatrix = _sut.Generate(_ratingBoardModel);
+                _totalScoreMatrix = _sut.Generate(_
+                    Model);
 
                 return this;
             }

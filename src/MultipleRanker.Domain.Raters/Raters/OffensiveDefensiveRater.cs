@@ -23,11 +23,11 @@ namespace MultipleRanker.Domain.Raters
             return raterType == RaterType.OffensiveDefensive;
         }
 
-        public IEnumerable<ParticipantRating> Rate(RatingBoardModel ratingBoardModel)
+        public IEnumerable<ParticipantRating> Rate(RatingListModel ratingListModel)
         {
-            var numParticipants = ratingBoardModel.ParticipantRatingModels.Count();
+            var numParticipants = ratingListModel.ParticipantRatingModels.Count();
 
-            _results = GenerateTotalScoreMatrix(ratingBoardModel);
+            _results = GenerateTotalScoreMatrix(ratingListModel);
 
             _defensiveRatings = Vector<double>.Build.Dense(_results.ColumnCount, 1);
 
@@ -41,13 +41,13 @@ namespace MultipleRanker.Domain.Raters
 
             var finalRatings = CombineRatings(numParticipants);
 
-            return CreateRatingResults(ratingBoardModel, finalRatings);
+            return CreateRatingResults(ratingListModel, finalRatings);
         }
 
-        private IEnumerable<ParticipantRating> CreateRatingResults(RatingBoardModel rankingBoardModel, Vector<double> finalRatings)
+        private IEnumerable<ParticipantRating> CreateRatingResults(RatingListModel ratingListModel, Vector<double> finalRatings)
         {
             var i = 0;
-            foreach(var participant in rankingBoardModel.ParticipantRatingModels)
+            foreach(var participant in ratingListModel.ParticipantRatingModels)
             {
                 yield return new ParticipantRating
                 {
@@ -149,7 +149,7 @@ namespace MultipleRanker.Domain.Raters
             return true;
         }
 
-        private Matrix<double> GenerateTotalScoreMatrix(RatingBoardModel ratingRankingBoardModel)
+        private Matrix<double> GenerateTotalScoreMatrix(RatingListModel ratingRankingBoardModel)
         {
             var numberOfParticipants = ratingRankingBoardModel.ParticipantRatingModels.Count;
 

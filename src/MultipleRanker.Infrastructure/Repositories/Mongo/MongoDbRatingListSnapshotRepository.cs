@@ -8,11 +8,11 @@ using MultipleRanker.Interfaces;
 
 namespace MultipleRanker.Infrastructure.Repositories
 {
-    public class MongoDbRatingBoardSnapshotRepository : IRatingBoardSnapshotRepository
+    public class MongoDbRatingListSnapshotRepository : IListSnapshotRepository
     {
-        private readonly IMongoCollection<RatingBoardSnapshotEntity> _ratingCollection;
+        private readonly IMongoCollection<RatingListSnapshotEntity> _ratingCollection;
 
-        public MongoDbRatingBoardSnapshotRepository()
+        public MongoDbRatingListSnapshotRepository()
         {
             var client = new MongoClient(
                 "mongodb://briandelaney:.$RC2SpD2Zsh!eM@ds016148.mlab.com:16148/multipleranker?retryWrites=false"
@@ -20,19 +20,19 @@ namespace MultipleRanker.Infrastructure.Repositories
             
             var database = client.GetDatabase("multipleranker");
 
-            _ratingCollection = database.GetCollection<RatingBoardSnapshotEntity>("ratingtables");
+            _ratingCollection = database.GetCollection<RatingListSnapshotEntity>("ratingtables");
         }
 
-        public async Task<RatingBoardSnapshot> Get(Guid ratingBoardId)
+        public async Task<RatingListSnapshot> Get(Guid ratingListId)
         {
             try
             {
-                var ratingBoards = await _ratingCollection
-                    .FindAsync(x => x.Id == ratingBoardId.ToString());
+                var ratingLists = await _ratingCollection
+                    .FindAsync(x => x.Id == ratingListId.ToString());
 
-                return ratingBoards
+                return ratingLists
                     .Single()
-                    .ToRatingBoardSnapshot();
+                    .ToRatingListSnapshot();
             }
             catch (Exception e)
             {
@@ -41,13 +41,13 @@ namespace MultipleRanker.Infrastructure.Repositories
             }
         }
 
-        public async Task Set(RatingBoardSnapshot ratingBoardSnapshot)
+        public async Task Set(RatingListSnapshot ratingListSnapshot)
         {
-            var ratingBoardSnapshotEntity = ratingBoardSnapshot.ToRatingBoardEntity();
+            var ratingListSnapshotEntity = ratingListSnapshot.ToRatingListEntity();
 
             await _ratingCollection.ReplaceOneAsync(
-                x => x.Id == ratingBoardSnapshot.Id.ToString(),
-                ratingBoardSnapshot.ToRatingBoardEntity(),
+                x => x.Id == ratingListSnapshot.Id.ToString(),
+                ratingListSnapshot.ToRatingListEntity(),
                 new ReplaceOptions { IsUpsert = true });
         }
     }

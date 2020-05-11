@@ -42,9 +42,9 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
 
             private PointsDifferentGenerator _sut;
 
-            private readonly Guid _ratingBoardId;
+            private readonly Guid _ratingListId;
 
-            private RatingBoardModel _ratingBoardModel;
+            private RatingListModel _ratingListModel;
 
             private Matrix<double> _totalScoreMatrix;
 
@@ -52,11 +52,11 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
 
             public TestContext()
             {
-                _ratingBoardModel = new RatingBoardModel();
+                _ratingListModel = new RatingListModel();
 
                 _sut = new PointsDifferentGenerator();
 
-                _ratingBoardId = Guid.NewGuid();
+                _ratingListId = Guid.NewGuid();
             }
 
             public TestContext SetExpectedResults()
@@ -72,7 +72,7 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
 
             public TestContext GenerateTotalScoreMatrix()
             {
-                _totalScoreMatrix = _sut.Generate(_ratingBoardModel);
+                _totalScoreMatrix = _sut.Generate(_ratingListModel);
 
                 return this;
             }
@@ -103,10 +103,10 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
                     {
                         ParticipantId = participant.Id,
                         ParticipantName = participant.Name,
-                        RankingBoardId = _ratingBoardId
+                        RankingBoardId = _ratingListId
                     };
 
-                    _ratingBoardModel.Apply(addParticipantToRatingBoard);
+                    _ratingListModel.Apply(addParticipantToRatingBoard);
                 }
 
                 return this;
@@ -118,7 +118,7 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
                 {
                     var matchUpCompletedCommand = new MatchUpCompleted
                     {
-                        RatingBoardId = _ratingBoardId,
+                        RatingBoardId = _ratingListId,
                         ParticipantScores = new List<MatchUpParticipantScore>
                         {
                             new MatchUpParticipantScore
@@ -134,7 +134,7 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
                         }
                     };
 
-                    _ratingBoardModel.Apply(matchUpCompletedCommand);
+                    _ratingListModel.Apply(matchUpCompletedCommand);
                 }
 
                 return this;
@@ -148,7 +148,7 @@ namespace MultipleRanker.Tests.Unit.GeneratorTests
                     Name = "Test Rating Board"
                 };
 
-                _ratingBoardModel.Apply(createRankingBoard);
+                _ratingListModel.Apply(createRankingBoard);
 
                 return this;
             }

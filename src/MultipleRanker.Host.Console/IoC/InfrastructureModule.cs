@@ -9,8 +9,8 @@ namespace MultipleRanker.Host
         protected override void Load(ContainerBuilder builder)
         {
             builder
-                .RegisterType<MongoDbRatingBoardSnapshotRepository>()
-                .As<IRatingBoardSnapshotRepository>();
+                .RegisterType<MongoDbRatingListSnapshotRepository>()
+                .As<IListSnapshotRepository>();
         }
     }
 }

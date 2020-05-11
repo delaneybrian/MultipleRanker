@@ -6,41 +6,42 @@ using MultipleRanker.Contracts.Messages;
 using MultipleRanker.Domain;
 using MultipleRanker.Domain.Raters;
 using MultipleRanker.Interfaces;
+using MultipleRanker.RankerApi.Contracts.Events;
 
 namespace MultipleRanker.Application.CommandHandlers
 {
-    public class GenerateRatingsForRatingBoardHandler : IHandler<GenerateRatingsForRatingBoard>
+    public class GenerateRatingsHandler : IHandler<GenerateRatings>
     {
         private readonly IEnumerable<IRater> _raters;
-        private readonly IRatingBoardSnapshotRepository _ratingBoardSnapshotRepository;
+        private readonly IListSnapshotRepository _ratingListSnapshotRepository;
         private readonly IMessagePublisher _messagePublisher;
 
-        public GenerateRatingsForRatingBoardHandler(IEnumerable<IRater> raters,
-            IRatingBoardSnapshotRepository ratingBoardSnapshotRepository,
+        public GenerateRatingsHandler(IEnumerable<IRater> raters,
+            IListSnapshotRepository ratingListSnapshotRepository,
             IMessagePublisher messagePublisher)
         {
             _raters = raters;
-            _ratingBoardSnapshotRepository = ratingBoardSnapshotRepository;
+            _ratingListSnapshotRepository = ratingListSnapshotRepository;
             _messagePublisher = messagePublisher;
         }
 
-        public async Task HandleAsync(GenerateRatingsForRatingBoard evt)
+        public async Task HandleAsync(GenerateRatings evt)
         {
-            var ratingBoardSnapshot = await _ratingBoardSnapshotRepository.Get(evt.RatingBoardId);
+            var ratingListSnapshot = await _ratingListSnapshotRepository.Get(evt.RatingListId);
 
-            var ratingBoardModel = RatingBoardModel.For(ratingBoardSnapshot);
+            var ratingListModel = RatingListModel.For(ratingListSnapshot);
 
-            ratingBoardModel.Apply(evt);
+            ratingListModel.Apply(evt);
 
             var rater = _raters.Single(r => r.IsFor(evt.RatingType.ToRankerType()));
 
-            var ratingsResults = rater.Rate(ratingBoardModel);
+            var ratingsResults = rater.Rate(ratingListModel);
 
             var ratingsGeneratedCommand = new RatingsGenerated
             {
                 RatingId = Guid.NewGuid(),
                 CalculatedAtUtc = DateTime.UtcNow,
-                RatingBoardId = evt.RatingBoardId,
+                RatingListId = evt.RatingListId,
                 RatingType = evt.RatingType,
                 ParticipantRatings = ratingsResults.ToList()
             };

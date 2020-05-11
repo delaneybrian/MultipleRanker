@@ -5,14 +5,14 @@ using System.Runtime.Serialization;
 namespace MultipleRanker.Definitions.Snapshots
 {
     [DataContract]
-    public class RatingBoardSnapshot
+    public class RatingListSnapshot
     {
         [DataMember]
         public Guid Id { get; set; }
 
         [DataMember]
-        public ICollection<RatingBoardParticipantSnapshot> RatingBoardParticipants { get; set; } 
-            = new List<RatingBoardParticipantSnapshot>();
+        public ICollection<RatingListParticipantSnapshot> RatingListParticipants { get; set; } 
+            = new List<RatingListParticipantSnapshot>();
 
         [DataMember]
         public long MatchUpsCompleted { get; set; }

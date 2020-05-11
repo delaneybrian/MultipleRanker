@@ -5,7 +5,7 @@ namespace MultipleRanker.Domain.Raters.Generators
 {
     public class PointsDifferentGenerator : IGenerator
     {
-        public Matrix<double> Generate(RatingBoardModel ratingRankingBoardModel)
+        public Matrix<double> Generate(RatingListModel ratingRankingBoardModel)
         {
             var numberOfParticipants = ratingRankingBoardModel.ParticipantRatingModels.Count;
 

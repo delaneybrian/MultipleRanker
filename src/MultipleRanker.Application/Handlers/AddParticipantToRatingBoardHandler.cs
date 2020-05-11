@@ -8,26 +8,26 @@ namespace MultipleRanker.Application.CommandHandlers
 {
     public class AddParticipantToRatingBoardHandler : IHandler<AddParticipantToRatingBoard>
     {
-        private readonly IRatingBoardSnapshotRepository _ratingBoardSnapshotRepository;
+        private readonly IListSnapshotRepository _ratingListSnapshotRepository;
 
-        public AddParticipantToRatingBoardHandler(IRatingBoardSnapshotRepository ratingBoardSnapshotRepository)
+        public AddParticipantToRatingBoardHandler(IListSnapshotRepository ratingListSnapshotRepository)
         {
-            _ratingBoardSnapshotRepository = ratingBoardSnapshotRepository;
+            _ratingListSnapshotRepository = ratingListSnapshotRepository;
         }
 
         public async Task HandleAsync(AddParticipantToRatingBoard evt)
         {
             try
             {
-                var ratingBoardSnapshot = await _ratingBoardSnapshotRepository.Get(evt.RankingBoardId);
+                var ratingListSnapshot = await _ratingListSnapshotRepository.Get(evt.RankingBoardId);
 
-                var ratingBoardModel = RatingBoardModel.For(ratingBoardSnapshot);
+                var ratingListModel = RatingListModel.For(ratingListSnapshot);
 
-                ratingBoardModel.Apply(evt);
+                ratingListModel.Apply(evt);
 
-                var updatedSnapshot = ratingBoardModel.ToSnapshot();
+                var updatedSnapshot = ratingListModel.ToSnapshot();
 
-                await _ratingBoardSnapshotRepository.Set(updatedSnapshot);
+                await _ratingListSnapshotRepository.Set(updatedSnapshot);
             }
             catch (Exception e)
             {

@@ -7,6 +7,6 @@ namespace MultipleRanker.Domain.Raters
     {
         bool IsFor(RaterType raterType);
 
-        IEnumerable<ParticipantRating> Rate(RatingBoardModel ratingBoardModel);
+        IEnumerable<ParticipantRating> Rate(RatingListModel ratingBoardModel);
     }
 }

@@ -156,15 +156,15 @@ namespace MultipleRanker.Tests.Integration
             private readonly HashSet<Guid> _participantIds
                 = new HashSet<Guid>();
 
-            private RatingBoardModel _sut;
+            private RatingListModel _sut;
 
             private readonly Guid _ratingBoardId;
 
-            private RatingBoardSnapshot _ratingBoardSnapshot;
+            private RatingListSnapshot _ratingBoardSnapshot;
             
             public TestContext()
             {
-                _sut = new RatingBoardModel();
+                _sut = new RatingListModel();
 
                 _ratingBoardId = Guid.NewGuid();
             }

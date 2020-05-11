@@ -42,13 +42,13 @@ namespace MultipleRanker.Tests.Unit
 
             private readonly Guid _ratingBoardId;
 
-            private RatingBoardModel _ratingBoardModel;
+            private RatingListModel _ratingBoardModel;
 
             private IEnumerable<ParticipantRating> _ratingResults;
 
             public TestContext()
             {
-                _ratingBoardModel = new RatingBoardModel();
+                _ratingBoardModel = new RatingListModel();
 
                 _sut = new OffensiveDefensiveRaters();
 

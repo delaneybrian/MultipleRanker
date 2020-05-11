@@ -4,14 +4,14 @@ using MultipleRanker.Contracts;
 
 namespace MultipleRanker.Domain.Raters.Raters
 {
-    public class KeenersRater : IRater
+    public class EloRater : IRater
     {
         public bool IsFor(RaterType raterType)
         {
-            return raterType == RaterType.KeenerMethod;
+            return raterType == RatingType.Elo ;
         }
 
-        public IEnumerable<ParticipantRating> Rate(RatingListModel ratingListModel)
+        public IEnumerable<ParticipantRating> Rate(RatingListModel ratingBoardModel)
         {
             throw new NotImplementedException();
         }

@@ -11,7 +11,7 @@ namespace MultipleRanker.Domain.Raters.Raters
             return raterType == RaterType.MarkovMethod;
         }
 
-        public IEnumerable<ParticipantRating> Rate(RatingBoardModel ratingBoardModel)
+        public IEnumerable<ParticipantRating> Rate(RatingListModel ratingListModel)
         {
             throw new NotImplementedException();
         }

@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MultipleRanker.RankerApi.Contracts" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MultipleRanker.Definitions\MultipleRanker.Definitions.csproj" />
     <ProjectReference Include="..\MultipleRanker.Domain.Raters\MultipleRanker.Domain.Raters.csproj" />
     <ProjectReference Include="..\MultipleRanker.Domain\MultipleRanker.Domain.csproj" />

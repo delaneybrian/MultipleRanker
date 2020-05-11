@@ -7,6 +7,7 @@
         MasseyMethod = 2,
         ColleyMethod = 3,
         KeenerMethod = 4,
-        MarkovMethod = 5
+        MarkovMethod = 5,
+        Elo = 6
     }
 }

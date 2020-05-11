@@ -5,7 +5,7 @@ namespace MultipleRanker.Contracts.Messages
 {
     public class RatingsGenerated
     {
-        public Guid RatingBoardId { get; set; }
+        public Guid RatingListId { get; set; }
 
         public Guid RatingId { get; set; }
 

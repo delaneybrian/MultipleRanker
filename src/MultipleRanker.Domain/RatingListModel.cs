@@ -6,7 +6,7 @@ using MultipleRanker.Definitions.Snapshots;
 
 namespace MultipleRanker.Domain
 {
-    public class RatingBoardModel
+    public class RatingListModel
     {
         public Guid Id { get; private set; }
         public List<ParticipantRatingModel> ParticipantRatingModels { get; private set; } = new List<ParticipantRatingModel>();
@@ -15,15 +15,15 @@ namespace MultipleRanker.Domain
         private DateTime _lastRatingCalculatedAt;
         private int _maxParticipantIndex;
 
-        public RatingBoardModel()
+        public RatingListModel()
         {
             
         }
 
-        private RatingBoardModel(RatingBoardSnapshot snapshot)
+        private RatingListModel(RatingListSnapshot snapshot)
         {
             Id = snapshot.Id;
-            ParticipantRatingModels = snapshot.RatingBoardParticipants
+            ParticipantRatingModels = snapshot.RatingListParticipants
                 .Select(participantSnapshot => ParticipantRatingModel.For(participantSnapshot))
                 .ToList();
             _matchUpsCompleted = snapshot.MatchUpsCompleted;
@@ -32,9 +32,9 @@ namespace MultipleRanker.Domain
             _maxParticipantIndex = snapshot.MaxParticipantIndex;
         }
 
-        public static RatingBoardModel For(RatingBoardSnapshot snapshot)
+        public static RatingListModel For(RatingListSnapshot snapshot)
         {
-            return new RatingBoardModel(snapshot);
+            return new RatingListModel(snapshot);
         }
 
         public void Apply(CreateRatingBoard evt)
@@ -77,12 +77,12 @@ namespace MultipleRanker.Domain
             ParticipantRatingModels.Add(participantRankingModel);
         }
 
-        public RatingBoardSnapshot ToSnapshot()
+        public RatingListSnapshot ToSnapshot()
         {
-            return new RatingBoardSnapshot
+            return new RatingListSnapshot
             {
                 Id = Id,
-                RatingBoardParticipants = ParticipantRatingModels
+                RatingListParticipants = ParticipantRatingModels
                     .Select(rankingModel => rankingModel.ToSnapshot())
                     .ToList(),
                 MatchUpsCompleted = _matchUpsCompleted,

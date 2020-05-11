@@ -6,6 +6,6 @@ namespace MultipleRanker.Domain.Raters
     {
         bool IsFor(GeneratorType generatorType);
 
-        Matrix<double> Generate(RatingBoardModel ratingRankingBoardModel);
+        Matrix<double> Generate(RatingListModel ratingRankingBoardModel);
     }
 }
