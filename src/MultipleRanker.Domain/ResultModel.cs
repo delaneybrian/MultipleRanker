@@ -5,17 +5,17 @@ namespace MultipleRanker.Domain
 {
     public class ResultModel
     {
-        private Guid _resultId;
+        public Guid ResultId { get; private set; }
 
-        private Guid _participant1Id;
+        public Guid Participant1Id { get; private set; }
 
-        private Guid _participant2Id;
+        public Guid Participant2Id { get; private set; }
 
-        private double _participant1Score;
+        public double Participant1Score { get; private set; }
 
-        private double _participant2Score;
+        public double Participant2Score { get; private set; }
 
-        private DateTime _resultTimeUtc;
+        public DateTime ResultTimeUtc { get; private set; }
 
         public void AddResult(
             Guid resultId,
@@ -25,34 +25,68 @@ namespace MultipleRanker.Domain
             Guid participant2Id,
             double participant2Score)
         {
-            _resultId = resultId;
-            _resultTimeUtc = resultTimeUtc;
-            _participant1Id = participant1Id;
-            _participant1Score = participant1Score;
-            _participant2Id = participant2Id;
-            _participant2Score = participant2Score;
+            ResultId = resultId;
+            ResultTimeUtc = resultTimeUtc;
+            Participant1Id = participant1Id;
+            Participant1Score = participant1Score;
+            Participant2Id = participant2Id;
+            Participant2Score = participant2Score;
         }
-     
+
+        private ResultModel(
+            Guid resultId,
+            Guid participant1Id,
+            double participant1Score,
+            Guid participant2Id,
+            double participant2Score,
+            DateTime resultTimeUtc)
+        {
+            ResultId = resultId;
+            Participant1Id = participant1Id;
+            Participant1Score = participant1Score;
+            Participant2Id = participant2Id;
+            Participant2Score = participant2Score;
+            ResultTimeUtc = resultTimeUtc;
+        }
+
+        public static ResultModel For(
+            Guid resultId,
+            Guid participant1Id,
+            double participant1Score,
+            Guid participant2Id,
+            double participant2Score,
+            DateTime resultTimeUtc)
+        {
+            return new ResultModel(
+                resultId,
+                participant1Id,
+                participant1Score,
+                participant2Id,
+                participant2Score,
+                resultTimeUtc);
+        }
+
         public static ResultModel For(RatingListResultSnapshot snapshot)
         {
-            _resultId = snapshot.ResultId;
-            _participant1Id = snapshot.Participant1Id;
-            _participant1Score = snapshot.Participant1Score;
-            _participant2Id = snapshot.Participant2Id;
-            _participant2Score = snapshot.Participant2Score;
-            _resultTimeUtc = snapshot.ResultTimeUtc;
+            return new ResultModel(
+                snapshot.ResultId,
+                snapshot.Participant1Id,
+                snapshot.Participant1Score,
+                snapshot.Participant2Id,
+                snapshot.Participant2Score,
+                snapshot.ResultTimeUtc);
         }
 
         public RatingListResultSnapshot ToSnapshot()
         {
             return new RatingListResultSnapshot
             {
-                ResultId = _resultId,
-                Participant1Id = _participant1Id,
-                Participant1Score = _participant1Score,
-                Participant2Id = _participant2Id,
-                Participant2Score = _participant2Score,
-                ResultTimeUtc = _resultTimeUtc
+                ResultId = ResultId,
+                Participant1Id = Participant1Id,
+                Participant1Score = Participant1Score,
+                Participant2Id = Participant2Id,
+                Participant2Score = Participant2Score,
+                ResultTimeUtc = ResultTimeUtc
             };
         }
     }

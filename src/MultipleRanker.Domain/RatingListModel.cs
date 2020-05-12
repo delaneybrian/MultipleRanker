@@ -12,7 +12,7 @@ namespace MultipleRanker.Domain
         public Guid Id { get; private set; }
         public List<ParticipantRatingModel> ParticipantRatingModels { get; private set; } = new List<ParticipantRatingModel>();
 
-        public List<ResultModel> AppliedResults { get; private set;  }
+        public List<ResultModel> AppliedResults { get; private set; } = new List<ResultModel>();
 
         private long _numberOfResults;
         private long _numberOfRatingsPerformed;
@@ -23,7 +23,7 @@ namespace MultipleRanker.Domain
 
         public RatingListModel()
         {
-            
+
         }
 
         private RatingListModel(RatingListSnapshot snapshot)
@@ -39,7 +39,8 @@ namespace MultipleRanker.Domain
             _ratingType = snapshot.RatingType;
             _ratingAggregationType = snapshot.RatingAggregationType;
             AppliedResults = snapshot.RatingListResults
-                .Select(x => )
+                .Select(rlr => ResultModel.For(rlr))
+                .ToList();
         }
 
         public static RatingListModel For(RatingListSnapshot snapshot)
@@ -57,7 +58,6 @@ namespace MultipleRanker.Domain
 
         public void Apply(GenerateRatings evt)
         {
-            //todo remove dependency on DateTime here :-(
             _lastRatingCalculatedAt = DateTime.UtcNow;
             _numberOfRatingsPerformed++;
         }
@@ -68,7 +68,8 @@ namespace MultipleRanker.Domain
 
             foreach (var participantResult in evt.ParticipantResults)
             {
-                var participantRatingModel = ParticipantRatingModels.Single(x => x.Id == participantResult.ParticipantId);
+                var participantRatingModel = ParticipantRatingModels
+                    .Single(x => x.Id == participantResult.ParticipantId);
 
                 foreach (var opponentResult in evt.ParticipantResults
                     .Where(x => x.ParticipantId != participantResult.ParticipantId))
@@ -77,6 +78,14 @@ namespace MultipleRanker.Domain
                         opponentResult.ParticipantId,
                         participantResult.Score,
                         opponentResult.Score);
+
+                    AppliedResults.Add(ResultModel.For(
+                        evt.ResultId, 
+                        participantResult.ParticipantId,
+                    participantResult.Score, 
+                        opponentResult.ParticipantId, 
+                        opponentResult.Score, 
+                        evt.ResultTimeUtc));
                 }
             }
         }

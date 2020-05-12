@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using MultipleRanker.Domain;
 using MultipleRanker.Domain.Raters;
+using MultipleRanker.Domain.Raters.Raters;
 using MultipleRanker.RankerApi.Contracts;
 using MultipleRanker.RankerApi.Contracts.Events;
 using NUnit.Framework;
@@ -11,8 +12,7 @@ using ParticipantRating = MultipleRanker.Contracts.ParticipantRating;
 
 namespace MultipleRanker.Tests.Unit
 {
-    [TestFixture]
-    public class OffensiveDefensiveRankerTests
+    public class EloRankerTests
     {
         private TestContext _context;
 
@@ -26,17 +26,19 @@ namespace MultipleRanker.Tests.Unit
                 .AddGames();
 
         [Test]
-        public void Test_Rating_Correctness() =>
+        public void Elo_Rates_In_Correct_Order() =>
             _context
                 .Rate()
-                .AssertAreExpected(new Dictionary<Guid, double>
-                {
-                    { Guid.Parse("BCE0C4D0-385F-47D6-9E37-820C30AC2147"), 279.8 },
-                    { Guid.Parse("6AA6FBD6-B0CB-4B2B-B9C2-DB87895DC181"), 188.8 },
-                    { Guid.Parse("DE6F9FC2-24C2-40CF-B012-5657FB2CEC9F"), 84.8 },
-                    { Guid.Parse("1549972F-2CFE-4F27-A23C-E54DFE6F85E5"), 41.8 },
-                    { Guid.Parse("FB052DE0-C9E3-4559-B370-A352EF4E3234"), 20.1 },
-                });
+                .AssertRatingOrderCorrect(
+                    new Dictionary<Guid, int>
+                    {
+                        { Guid.Parse("FB052DE0-C9E3-4559-B370-A352EF4E3234"), 5 },
+                        { Guid.Parse("6AA6FBD6-B0CB-4B2B-B9C2-DB87895DC181"), 1 },
+                        { Guid.Parse("1549972F-2CFE-4F27-A23C-E54DFE6F85E5"), 4 },
+                        { Guid.Parse("DE6F9FC2-24C2-40CF-B012-5657FB2CEC9F"), 3 },
+                        { Guid.Parse("BCE0C4D0-385F-47D6-9E37-820C30AC2147"), 2 },
+                    })
+                .AssertRatingRangeCorrect();
 
         public class TestContext
         {
@@ -58,7 +60,7 @@ namespace MultipleRanker.Tests.Unit
             {
                 _ratingListModel = new RatingListModel();
 
-                _sut = new OffensiveDefensiveRaters();
+                _sut = new EloRater();
 
                 _ratingListId = Guid.NewGuid();
             }
@@ -157,19 +159,6 @@ namespace MultipleRanker.Tests.Unit
                 return this;
             }
 
-            public TestContext AssertAreExpected(
-                IDictionary<Guid, double> expectedRatings)
-            {
-                var testAccuracyThreshold = 1;
-
-                foreach (var ratingResult in _ratingResults)
-                {
-                    Assert.Less(Math.Abs(expectedRatings[ratingResult.ParticipantId] - ratingResult.Rating), testAccuracyThreshold);
-                }
-
-                return this;
-            }
-
             public TestContext LoadTeams()
             {
                 var homeParticipants = _tempMatchUps
@@ -192,6 +181,34 @@ namespace MultipleRanker.Tests.Unit
                 foreach (var participantId in allParticipantIds)
                 {
                     _partitipcants.Add(participantId);
+                }
+
+                return this;
+            }
+
+            public TestContext AssertRatingOrderCorrect(
+                IDictionary<Guid, int> expectedRatingOrderByTeamId)
+            {
+                var ratingPosition = 1;
+                foreach (var ratingResult in _ratingResults
+                    .OrderByDescending(x => x.Rating))
+                {
+                    var expectedRatingOrder = expectedRatingOrderByTeamId[ratingResult.ParticipantId];
+
+                    Assert.AreEqual(expectedRatingOrder, ratingPosition);
+
+                    ratingPosition++;
+                }
+
+                return this;
+            }
+
+            public TestContext AssertRatingRangeCorrect()
+            {
+                foreach (var ratingResult in _ratingResults)
+                {
+                    Assert.Greater(ratingResult.Rating, 1000);
+                    Assert.Less(ratingResult.Rating, 2000);
                 }
 
                 return this;
